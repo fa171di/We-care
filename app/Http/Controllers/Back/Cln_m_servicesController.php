@@ -39,8 +39,8 @@ class Cln_m_servicesController extends Controller
      */
     public function show(string $id)
     {
-        $services = cln_x_visits::find(950353);
-        dd($services->cln_m_services);
+        $services = cln_x_visits::find($id);
+        $services = $services->cln_m_services;
         return view('back.services.index', compact('services'));
     }
 

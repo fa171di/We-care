@@ -54,6 +54,11 @@ class gnr_m_patients extends Model
 
     }
 
+    public function cln_m_medical_his()
+    {
+        return $this->belongsToMany(cln_m_medical_his::class, 'cln_x_medical_his','patient','med_id');
+    }
+
     public function age()
     {
         return Carbon::parse($this->attributes['birth_date'])->age;

@@ -12,4 +12,9 @@ class cln_m_medical_his extends Model
         'e_date','num','note','active',
         'act','alert'];
     protected $table = 'cln_m_medical_his';
+
+    public function gnr_m_patients()
+    {
+        return $this->belongsToMany(gnr_m_patients::class, 'cln_x_medical_his','med_id','patient');
+    }
 }

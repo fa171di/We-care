@@ -21,8 +21,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الزيارات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة
-                زيارات المريض</span>
+                <h4 class="content-title mb-0 my-auto">خدمات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة
+                خدمات الزيارة للمريض</span>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
                 <div class="card-header pb-0">
                     <div class="col-sm-1 col-md-2">
                         @can('اضافة مستخدم')
-                            <a class="btn btn-primary btn-sm" href="">اضافة زيارة</a>
+                            <a class="btn btn-primary btn-sm" href="">اضافة خدمة</a>
                         @endcan
                     </div>
                 </div>
@@ -54,21 +54,22 @@
                                style=" text-align: center;">
                             <thead>
                             <tr>
+                                <th class="wd-10p border-bottom-0">رقم الخدمة</th>
                                 <th class="wd-10p border-bottom-0">عيادة</th>
                                 <th class="wd-15p border-bottom-0">الخدمة</th>
+                                <th class="wd-15p border-bottom-0">السعر</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach ($services as $key => $pat)
                                 <tr>
-                                    <td>{{ $pat->gnr_m_clinics->name_ar }}</td>
+                                    <td>{{$key+1}}</td>
+                                    <td>{{ $pat->clinic }}</td>
                                     <td>{{ $pat->name_ar }}</td>
+                                    <td></td>
                                     <td>
-                                        <a href="{{ route('users.edit', $pat->id) }}" class="btn btn-sm btn-info"
+                                        <a href="{{ route('services.edit', $pat->id) }}" class="btn btn-sm btn-info"
                                            title="تعديل"><i class="las la-pen"></i></a>
-
-                                        <a href="{{ route('users.edit', $pat->id) }}" class="btn btn-sm btn-success"
-                                           title="استعراض"><i class="las la-pen"></i></a>
 
                                         <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
                                            data-user_id="{{ $pat->id }}" data-username="{{ $pat->name }}"
@@ -94,7 +95,7 @@
                         <button aria-label="Close" class="close"
                                 data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <form action="{{ route('users.destroy', 'test') }}" method="post">
+                    <form action="{{ route('services.destroy', 'test') }}" method="post">
                         {{ method_field('delete') }}
                         {{ csrf_field() }}
                         <div class="modal-body">
