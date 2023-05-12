@@ -16,7 +16,7 @@ use Illuminate\Validation\Rules\File;
 class doctors extends Model
 {
     use HasFactory;
-    protected $fillable = ['act','name_ar','subgrp','sex','specialization_ar'
+    protected $fillable = ['act','famous','name_ar','subgrp','sex','specialization_ar'
         ,'to_time','slot_time', 'from_time','user_id','phone_number','photo'];
     protected $table = 'doctors';
 
@@ -30,9 +30,25 @@ class doctors extends Model
         return $this->belongsTo(gnr_m_clinics::class, 'subgrp','id');
     }
 
+    public function cln_x_prev_com(){
+        return $this->hasMany(cln_x_prev_com::class, 'doc','id');
+    }
+
+    public function cln_x_prev_str(){
+        return $this->hasMany(cln_x_prev_str::class, 'doc','id');
+    }
+    public function cln_x_prev_cln(){
+        return $this->hasMany(cln_x_prev_cln::class, 'doc','id');
+    }
+    public function cln_x_prev_not(){
+        return $this->hasMany(cln_x_prev_not::class, 'doc','id');
+    }
+    public function cln_x_prev_dia(){
+        return $this->hasMany(cln_x_prev_dia::class, 'doc','id');
+    }
     public function scopeSelection($query)
     {
-        return $query->select('act','name_ar','subgrp','sex','specialization_ar','title_ar'
+        return $query->select('act','famous','name_ar','subgrp','sex','specialization_ar','title_ar'
             ,'to_time','slot_time', 'from_time','user_id','phone_number','photo');
     }
 
@@ -42,6 +58,11 @@ class doctors extends Model
 
     }
 
+    public function getFamous()
+    {
+        return $this->famous == '0' ? 'غير معروف' : 'معروف';
+
+    }
     public function getAct()
     {
         return $this->act == '1' ? 'ضمن الدوام' : 'خارج الدوام';

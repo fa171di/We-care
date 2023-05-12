@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
-use App\Models\back\cln_m_icd10_md;
 use App\Models\back\doctors;
 use App\Models\back\gnr_m_clinics;
+use App\Repositories\Clinics\IClinicRepository;
 use Illuminate\Http\Request;
 
 class Gnr_m_clinicsController extends Controller
@@ -14,10 +14,16 @@ class Gnr_m_clinicsController extends Controller
      * Display a listing of the resource.
      */
 
+    public IClinicRepository $ClinicRepository;
+
+    public function __construct(IClinicRepository $clinic)
+    {
+        $this->ClinicRepository = $clinic;
+    }
 
     public function index()
     {
-        $departments = gnr_m_clinics::all();
+        $departments = $this->ClinicRepository->index();
         return view('back.departments.index', compact('departments'));
     }
 

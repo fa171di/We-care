@@ -2,6 +2,7 @@
 
 namespace App\Models\back;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,11 @@ class gnr_m_patients_medical_info extends Model
     public function gnr_m_patients(): BelongsTo
     {
         return $this->belongsTo(gnr_m_patients::class,'patient', 'id')->withDefault();
+    }
+
+    public function age()
+    {
+        return Carbon::parse($this->attributes['birth_date'])->age;
     }
 
 }

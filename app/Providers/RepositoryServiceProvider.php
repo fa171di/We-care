@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Clinics\ClinicsRepository;
+use App\Repositories\Clinics\IClinicRepository;
 use App\Repositories\Doctors\DoctorRepository;
 use App\Repositories\Doctors\IDoctorRepository;
 use App\Repositories\Patients\IPatientRepository;
@@ -17,6 +19,8 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(IDoctorRepository::class,DoctorRepository::class);
         $this->app->bind(IPatientRepository::class,PatientRepository::class);
+        $this->app->bind(IClinicRepository::class,ClinicsRepository::class);
+
     }
 
     /**

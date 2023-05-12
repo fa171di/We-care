@@ -15,6 +15,7 @@ class cln_m_medical_his extends Model
 
     public function gnr_m_patients()
     {
-        return $this->belongsToMany(gnr_m_patients::class, 'cln_x_medical_his','med_id','patient');
+        return $this->belongsToMany(gnr_m_patients::class, 'cln_x_medical_his','med_id','patient')
+            ->withPivot('cat','s_date','e_date','note','date');
     }
 }

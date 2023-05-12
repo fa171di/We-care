@@ -161,6 +161,16 @@
 
                 <div class="row mg-b-20">
                     <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <x-forms.label id=""><span class="">حالة التميز : </span></x-forms.label>
+                        <select name="famous" class="form-control select2">
+                            <option value="0">معروف</option>
+                            <option value="1">غير معروف</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mg-b-20">
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
                         <x-forms.label id=""><span class="">وصف عن الطبيب : </span></x-forms.label>
 
                         <textarea class="form-control" name="specialization_ar" style="height: 215px;" placeholder="Textarea" rows="3">Textarea</textarea>

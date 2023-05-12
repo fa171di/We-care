@@ -36,6 +36,11 @@
             {{ session('success') }}
         </div>
     @endif
+    @if (session('error'))
+        <div class="alert alert-success">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <!-- row opened -->
     <div class="row row-sm">
@@ -43,9 +48,10 @@
             <div class="card">
                 <div class="card-header pb-0">
                     <div class="col-sm-1 col-md-2">
-                        @can('اضافة مستخدم')
-                            <a class="btn btn-primary btn-sm" href="">اضافة زيارة</a>
-                        @endcan
+                        <a class="btn btn-primary btn-sm" data-effect="effect-scale"
+                           data-user_id="{{$visits[0]->patient}}"
+                           data-toggle="modal" href="#modaldemo9" title="اضافة"><i
+                                class="las la-pen-fancy"></i> اضافة زيارة </a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -58,24 +64,30 @@
                                 <th class="wd-15p border-bottom-0">حالتها</th>
                                 <th class="wd-20p border-bottom-0">بداية الزيارة</th>
                                 <th class="wd-15p border-bottom-0">ملاحظة</th>
+                                <th class="wd-15p border-bottom-0">العمليات</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($patient as $key => $pat)
+                            @foreach ($visits as $key => $pat)
                                 <tr>
                                     <td>{{ $pat->gnr_m_clinics->name_ar }}</td>
                                     <td>{{ $pat->getsType() }}</td>
                                     <td>{{ $pat->d_start() }}</td>
                                     <td>{{ $pat->note }}</td>
                                     <td>
+                                        @if($pat->cln_m_services->isNotEmpty())
+                                            <a href="{{ route('services.show', $pat->id) }}"
+                                               class="btn btn-sm btn-success"
+                                               title="استعراض الملف الطبي للزيارة"><i class="las la-eye"></i></a>
+                                        @else
+                                            <a href="{{ route('MedicalFile.create', ['visit' => $pat->id,'clinic' =>$pat->gnr_m_clinics->id]) }}" class="btn btn-sm btn-primary-gradient"
+                                               title="اضافة ملف طبي للزيارة"><i class="las la-pen"></i></a>
+                                        @endif
                                         <a href="{{ route('users.edit', $pat->id) }}" class="btn btn-sm btn-info"
-                                           title="تعديل"><i class="las la-pen"></i></a>
-
-                                        <a href="{{ route('services.show', $pat->id) }}" class="btn btn-sm btn-success"
-                                           title="استعراض"><i class="las la-pen"></i></a>
+                                           title="تعديل"><i class="las la-edit"></i></a>
 
                                         <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
-                                           data-user_id="{{ $pat->id }}" data-username="{{ $pat->name }}"
+                                           data-user_id="{{ $pat->id }}"
                                            data-toggle="modal" href="#modaldemo8" title="حذف"><i
                                                 class="las la-trash"></i></a>
                                     </td>
@@ -98,13 +110,47 @@
                         <button aria-label="Close" class="close"
                                 data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <form action="{{ route('users.destroy', 'test') }}" method="post">
+                    <form action="{{ route('visits.destroy','test') }}" method="post">
                         {{ method_field('delete') }}
                         {{ csrf_field() }}
                         <div class="modal-body">
                             <p>هل انت متاكد من عملية الحذف ؟</p><br>
                             <input type="hidden" name="user_id" id="user_id" value="">
-                            <input class="form-control" name="username" id="username" type="text" readonly>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+                            <button type="submit" class="btn btn-danger">تاكيد</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal" id="modaldemo9">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content modal-content-demo">
+                    <div class="modal-header">
+                        <h6 class="modal-title">اضافة زيارة</h6>
+                        <button aria-label="Close" class="close"
+                                data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action="{{ route('visits.store') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        @method('POST')
+                        <div class="modal-body">
+                            <p>هل تريد اضافة زيارة؟</p><br>
+                            <input type="hidden" name="user_id" id="user_id" value="">
+
+                            <x-forms.label id=""><span class="">اختر عيادة</span></x-forms.label>
+                            <select name="clinic" class="form-control select2">
+                                <option></option>
+                                @foreach ($clinics as $key => $value)
+                                    <option value="{{$value->id}}"/>{{ $value->name_ar }}</option>
+                                @endforeach
+                            </select>
+
+                            <x-forms.label id=""><span class="">ادخل ملاحظة </span></x-forms.label>
+                            <input class="form-control" name="note" id="" type="text">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
@@ -147,10 +193,14 @@
         $('#modaldemo8').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget)
             var user_id = button.data('user_id')
-            var username = button.data('username')
             var modal = $(this)
             modal.find('.modal-body #user_id').val(user_id);
-            modal.find('.modal-body #username').val(username);
+        })
+        $('#modaldemo9').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var user_id = button.data('user_id')
+            var modal = $(this)
+            modal.find('.modal-body #user_id').val(user_id);
         })
     </script>
 

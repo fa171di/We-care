@@ -71,10 +71,19 @@
                 <x-forms.input hidden="" name="subgrp" :value="$section" />
                 <x-forms.input hidden="" name="doctor_id" :value="$doctorAll->id" />
                 <div class="row mg-b-20">
-                        <div class="parsley-input col-md-6" id="fnWrapper">
-                            <x-forms.input label="اسم الطبيب:"  requiredInput="*" class="required" name="name_ar" :value="$doctorAll->name_ar" />
-                        </div>
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="fnWrapper">
+                        <x-forms.input label="اسم الطبيب:" requiredInput="*" class="required" name="name_ar"
+                                       :value="$doctorAll->name_ar"/>
                     </div>
+
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <x-forms.label id=""><span class="">حالة التميز : </span></x-forms.label>
+                        <select name="famous" class="form-control select2">
+                            <option value="0" @if($doctorAll->sex=='0')selected @endif>معروف</option>
+                            <option value="1" @if($doctorAll->sex=='1')selected @endif>غير معروف</option>
+                        </select>
+                    </div>
+                </div>
 
                 <div class="row mg-b-20">
 

@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Models\back;
-
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class cln_x_visits_services extends Model
+class cln_x_visits_services extends Pivot
 {
     use HasFactory;
     protected $fillable = ['visit_id ', 'clinic', 'service','status'

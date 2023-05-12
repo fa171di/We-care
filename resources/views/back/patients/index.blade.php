@@ -78,16 +78,17 @@
                     <x-forms.input name="mobile" placeholder="الموبايل" class="mx-2" :value="request('phone')" />
                     <button class="btn btn-dark mx-2">Filter</button>
                 </form>
-                <p class="tx-12 tx-gray-500 mb-2">Example of Valex Striped Rows.. <a href="">Learn more</a></p>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped mg-b-0 text-md-nowrap">
                         <thead>
                         <tr>
+                            <th class="border-bottom-0">نوع</th>
                             <th class="border-bottom-0">الاسم</th>
                             <th class="border-bottom-0">اسم الاب</th>
                             <th class="border-bottom-0">الاسم الام</th>
+                            <th class="border-bottom-0">الحالة اجتماعية</th>
                             <th class="border-bottom-0">الموبايل</th>
                             <th class="border-bottom-0">العمر</th>
                             <th class="border-bottom-0">الجنس</th>
@@ -98,16 +99,17 @@
                             <th class="border-bottom-0">القومية</th>
                             <th class="border-bottom-0">العنوان</th>
                             <th class="border-bottom-0">الايميل</th>
-                            <th class="border-bottom-0">طول الاب</th>
-                            <th class="border-bottom-0">طول الام</th>
+                            <th class="border-bottom-0">العمليات</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach ($patien as $key => $value)
                             <tr>
+                                <td>{{$value->getTitle()}}</td>
                                 <td>{{$value->l_name}} {{$value->f_name}}</td>
                                 <td>{{$value->ft_name}}</td>
                                 <td>{{$value->mother_name}}</td>
+                                <td>{{$value->getMarital_status()}}</td>
                                 <td>{{$value->mobile}}</td>
                                 <td>{{$value->age()}}</td>
                                 <td>{{$value->getSex()}}</td>
@@ -118,8 +120,6 @@
                                 <td>{{$value->gnr_m_nationality->name_ar?? '----'}}</td>
                                 <td>{{$value->address}}</td>
                                 <td>{{$value->user->email}}</td>
-                                <td>{{$value->gnr_m_patients_medical_info->father_height?? '----'}}</td>
-                                <td>{{$value->gnr_m_patients_medical_info->mother_height?? '----'}}</td>
                                 <td>
                                         <a href="{{ route('patients.edit', $value->id) }}" class="btn btn-sm btn-info"
                                            title="تعديل"><i class="las la-pen"></i></a>

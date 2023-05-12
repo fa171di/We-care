@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class gnr_m_clinics extends Model
 {
     use HasFactory;
-    protected $fillable = ['name_ar', 'name_en','act','type','linked'];
+    protected $fillable = ['name_ar', 'name_en','act'];
     protected $table = 'gnr_m_clinics';
 
     public function doctor(){
@@ -21,6 +21,9 @@ class gnr_m_clinics extends Model
 
     public function cln_x_visits(){
         return $this->hasMany(cln_x_visits::class, 'clinic','id');
+    }
+    public function cln_m_services(){
+        return $this->hasMany(cln_m_services::class, 'clinic','id');
     }
     public function getAct()
     {

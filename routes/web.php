@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\back\Cln_m_servicesController;
+use App\Http\Controllers\Back\Cln_m_servicesController;
 use App\Http\Controllers\Back\Cln_x_visitsController;
 use App\Http\Controllers\Back\DoctorsController;
 use App\Http\Controllers\Back\Gnr_m_clinicsController;
 use App\Http\Controllers\Back\Gnr_m_patientsController;
+use App\Http\Controllers\Back\Medical_fileController;
 use App\Http\Controllers\Back\RoleController;
 use App\Http\Controllers\Back\UserController;
 use App\Http\Controllers\ProfileController;
@@ -53,6 +54,10 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('patients', Gnr_m_patientsController::class);
     Route::resource('visits', Cln_x_visitsController::class);
     Route::resource('services', Cln_m_servicesController::class);
+
+    //zRoute::get('/user/{id}', [UserController::class, 'show']);
+    Route::get('/MedicalFile/create/{visit}/{clinic}', [Medical_fileController::class])->name("MedicalFile.create");;
+    Route::resource('MedicalFile', Medical_fileController::class );
 
     Route::get('/{page}', [AdminController::class, 'index']);
 });

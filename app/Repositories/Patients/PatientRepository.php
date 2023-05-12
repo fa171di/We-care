@@ -22,20 +22,26 @@ class PatientRepository implements IPatientRepository
     {
         $this->patient = $patient;
     }
+
+
     public function index()
     {
         $request = request();
-        $query = gnr_m_patients::with('user','gnr_m_cities','gnr_m_areas','gnr_m_nationality')->where('id','=',2045702);
+        $query = gnr_m_patients::with('user','gnr_m_cities','gnr_m_areas','gnr_m_nationality');
 
-        if($f_name = $request->query('f_name')){
-            $query->where('f_name','LIKE',"%{$f_name}%");
+        if ($f_name = $request->query('f_name')) {
+            $query->where('f_name', 'LIKE', "%{$f_name}%");
         }
-        if($l_name = $request->query('l_name')){
-            $query->where('l_name','LIKE',"%{$l_name}%");
+
+        if ($l_name = $request->query('l_name')) {
+            $query->where('l_name', 'LIKE', "%{$l_name}%");
         }
-        if($mobile = $request->query('mobile')){
-            $query->where('mobile','=',$mobile);
+
+        if ($mobile = $request->query('mobile')) {
+            $query->where('mobile', '=', $mobile);
         }
+        $query->where('id', '=', 2120353);
+
         return $query->paginate(10);
     }
 

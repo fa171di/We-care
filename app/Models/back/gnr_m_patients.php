@@ -13,16 +13,14 @@ class gnr_m_patients extends Model
 {
     use HasFactory;
     protected $fillable = ['f_name', 'l_name', 'ft_name',
-        'mother_name','plc_birth',
-        'no','mobile','birth_date','sex',
-        'phone','date','blood','p_city', 'p_area', 'profession',
-        'marital_status','title','nationality','reach_reference',
-        'reach_reference_desc','address','user_id'];
+        'mother_name','plc_birth','mobile','birth_date','sex',
+        'phone','date','blood','p_city', 'p_area',
+        'marital_status','title','nationality','address','user_id'];
     protected $table = 'gnr_m_patients';
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class,'user_id', 'id')->withDefault();;
+        return $this->belongsTo(User::class,'user_id', 'id')->withDefault();
     }
 
     public function gnr_m_patients_medical_info(): HasOne
@@ -45,20 +43,63 @@ class gnr_m_patients extends Model
         return $this->belongsTo(gnr_m_nationality::class,'nationality','id');
     }
 
-    public function gnr_m_patients(){
+    /*public function gnr_m_patients(){
         return $this->hasMany(gnr_m_patients::class, 'patient','id');
+    }*/
+
+    public function cln_m_medical_his()
+    {
+        return $this->belongsToMany(cln_m_medical_his::class, 'cln_x_medical_his','patient','med_id')->withPivot('cat','s_date','e_date','note','date');
     }
+
+    public function cln_x_prev_com(){
+        return $this->hasMany(cln_x_prev_com::class, 'patient','id');
+    }
+
+    public function cln_x_prev_str(){
+        return $this->hasMany(cln_x_prev_str::class, 'patient','id');
+    }
+
+    public function cln_x_prev_cln(){
+        return $this->hasMany(cln_x_prev_cln::class, 'patient','id');
+    }
+
+    public function cln_x_prev_not(){
+        return $this->hasMany(cln_x_prev_not::class, 'patient','id');
+    }
+
+    public function cln_x_prev_dia(){
+        return $this->hasMany(cln_x_prev_dia::class, 'patient','id');
+    }
+
     public function getSex()
     {
         return $this->sex == 1 ? 'ذكر' : 'انثى';
 
     }
 
-    public function cln_m_medical_his()
+    public function getMarital_status()
     {
-        return $this->belongsToMany(cln_m_medical_his::class, 'cln_x_medical_his','patient','med_id');
+        if ($this->marital_status == 1){return $this->marital_status = 'متزوج';}
+        elseif ($this->marital_status == 2){return $this->marital_status = 'اعزب';}
+        elseif ($this->marital_status == 3){return $this->marital_status = 'مطلق';}
+        elseif ($this->marital_status == 4){return $this->marital_status = 'ارمل';}
+        elseif ($this->marital_status == 5){return $this->marital_status = 'منفصل';}
+        elseif ($this->marital_status == 6){return $this->marital_status = 'مساكنة';}
+
     }
 
+    public function getTitle()
+    {
+        if ($this->title == 1){return $this->title = 'السيد';}
+        elseif ($this->title == 2){return $this->title = 'السيدة';}
+        elseif ($this->title == 3){return $this->title = 'انسة';}
+        elseif ($this->title == 4){return $this->title = 'دكتور';}
+        elseif ($this->title == 5){return $this->title = 'طفل';}
+        elseif ($this->title == 6){return $this->title = 'طفلة';}
+        elseif ($this->title == 7){return $this->title = 'شاب';}
+
+    }
     public function age()
     {
         return Carbon::parse($this->attributes['birth_date'])->age;

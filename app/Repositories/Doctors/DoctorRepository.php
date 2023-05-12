@@ -25,6 +25,12 @@ class DoctorRepository implements IDoctorRepository
         //dd($doctor);
     }
 
+    public function getFamousDoctors(){
+        return doctors::with('user','gnr_m_clinics')
+            ->where('famous' ,'=',0)->get();
+    }
+
+
     public function show($department)
     {
         return doctors::with('user','gnr_m_clinics')->where('subgrp','=',$department)->get();

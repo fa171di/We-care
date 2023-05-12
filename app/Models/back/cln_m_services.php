@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class cln_m_services extends Model
 {
     use HasFactory;
-    protected $fillable = ['code', 'clinic', 'name_ar','name_en','ord',
-        'act','rev','ser_time','rev_time',
-        'multi','def','dis','opr_type', 'bty'];
+    protected $fillable = ['clinic', 'name_ar','name_en'];
     protected $table = 'cln_m_services';
+
+    public function gnr_m_clinics()
+    {
+        return $this->belongsTo(gnr_m_clinics::class, 'clinic','id');
+    }
 
     public function cln_x_visits()
     {
