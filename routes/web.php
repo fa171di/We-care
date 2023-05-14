@@ -56,7 +56,7 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('services', Cln_m_servicesController::class);
 
     //zRoute::get('/user/{id}', [UserController::class, 'show']);
-    Route::get('/MedicalFile/create/{visit}/{clinic}', [Medical_fileController::class])->name("MedicalFile.create");;
+    Route::get('/MedicalFile/create/{visit}/{clinic}', [Medical_fileController::class]);//->name("MedicalFile.create");;
     Route::resource('MedicalFile', Medical_fileController::class );
 
     Route::get('/{page}', [AdminController::class, 'index']);

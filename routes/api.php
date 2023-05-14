@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+##################################### Auth Apis #########################################
+Route::post('register', [ApiAuthController::class, 'register']);
+Route::post('Api_login', [ApiAuthController::class, 'login']);
+Route::middleware('auth:api')->group(function () {
+    Route::post('email/verify', [ApiAuthController::class, 'verify']);
+    Route::get('email/resend', [ApiAuthController::class, 'resend']);
+    Route::post('logout', [ApiAuthController::class, 'logout']);
+    Route::get('home',[ApiAuthController::class,'home']);
 });
+#########################################################################################
 
 
 
