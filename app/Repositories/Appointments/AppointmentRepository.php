@@ -7,8 +7,8 @@ use App\Models\back\doctors;
 use App\Models\User;
 use App\Traits\UploadFileTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class AppointmentRepository implements IAppointmentRepository
 {
@@ -19,24 +19,55 @@ class AppointmentRepository implements IAppointmentRepository
     {
         $this->Appointment = $appointment;
     }
-    public function index()
-    {
 
-        return Appointment::with('')->get();
+    public function pat_appoints(){
+        $user = auth()->user();
+        $user_id = $user->id;
+        $today = Carbon::today()->format('Y/m/d');
+        return Appointment::with('doctor','timeSlot')
+            ->where('appointment_for', $user_id)
+            ->whereDate('appointment_date', '>=', $today)
+            ->where('status', 0)->get();
     }
 
-
-
-    public function show($department)
-    {
-        return doctors::with('user','gnr_m_clinics')->where('subgrp','=',$department)->get();
+    public function doc_appoints(){
+        $user = auth()->user();
+        $user_id = $user->id;
+        $today = Carbon::today()->format('Y/m/d');
+        $doctor = doctors::where('user_id',$user_id)->first();
+        $doc_id = $doctor->id;
+        return Appointment::with('patient','timeSlot')
+            ->where('appointment_with', $doc_id)
+            ->whereDate('appointment_date', '>', $today)
+            ->where('status', 0)
+            ->orderBy('id', 'DESC')->get();
     }
 
-    public function edit($doctor)
+    public function doc_today_appoints(){
+        $user = auth()->user();
+        $user_id = $user->id;
+        $today = Carbon::today()->format('Y/m/d');
+        $doctor = doctors::where('user_id',$user_id)->first();
+        $doc_id = $doctor->id;
+        return Appointment::with('patient','timeSlot')
+            ->where('appointment_with', $doc_id)
+            ->whereDate('appointment_date', '=', $today)
+            ->where('status', 0)
+            ->orderBy('id', 'DESC')->get();
+    }
+
+    public function pat_canceled_appoints(){
+        $user = auth()->user();
+        $user_id = $user->id;
+        return Appointment::with('doctor','timeSlot')
+            ->where('appointment_for', $user_id)
+            ->where('status', 2)
+            ->orderBy('id', 'DESC')->get();
+    }
+
+    public function show($appointment)
     {
-        $doc = $this->doctor::with('user')->where('id','=',$doctor)->get();
-        $user =  User::all();
-       return [$doc,$user];
+        return $this->Appointment::with('patient','doctor');
     }
 
     public function update(Request $request, Appointment $appointment)
@@ -67,38 +98,18 @@ class AppointmentRepository implements IAppointmentRepository
 
     }
 
-    public function create()
-    {
-        // TODO: Implement create() method.
-    }
-
     public function store(Request $request)
     {
-        $new_image = "";
+        $date = $request->appointment_date;
+        $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
         try {
-            DB::transaction(function () use ($request,$new_image) {
-                $user = User::create([
-                    'name' => $request->first_name .' '.$request->last_name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request['password']),
-                    'Status'=> $request->Status,
-                ]);
-                $user->assignRole($request->roles);
-                if ($request->hasFile('photo')) {
-                    $new_image = $this->UploadFile($request, 'photo', 'doctors');
-                }
-                $doctor = doctors::create([
-                    'act' => $request->act,
-                    'name_ar' => $request->name_ar,
-                    'from_time'=> $request->from_time,
-                    'to_time'=> $request->to_time,
-                    'slot_time'=> $request->slot_time,
-                    'user_id'=> $request->id,
-                    'phone_number'=> $user->phone_number,
-                    'photo'=> $new_image,
-                    'subgrp'=> $request->subgrp,
-                    'sex'=> $request->sex,
-                    'specialization_ar'=> $request->specialization_ar,
+            DB::transaction(function () use ($request,$newDate) {
+                Appointment::create([
+                    'appointment_for' => $request->appointment_for,
+                    'appointment_with' => $request->appointment_with,
+                    'appointment_date' => $newDate,
+                    'available_time' => $request->available_time,
+                    'available_slot' => $request->available_slot,
                 ]);
             });
             DB::commit();

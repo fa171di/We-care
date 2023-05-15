@@ -9,15 +9,17 @@ use Illuminate\Http\Request;
 interface IAppointmentRepository
 {
 
-    public function index();
+    public function pat_appoints();
+
+    public function doc_appoints();
+
+    public function doc_today_appoints();
+
+    public function pat_canceled_appoints();
 
     public function show($appointment);
 
-    public function edit($appointment);
-
     public function update(Request $request, Appointment $appointment);
-
-    public function create();
 
     public function store(Request $request);
 

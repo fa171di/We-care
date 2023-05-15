@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\Front\ApiAppointmentController;
 use App\Http\Controllers\Front\ApiPatientController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
@@ -30,6 +31,16 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function (){
     Route::get('departments',[ApiPatientController::class,'departments']);
     Route::get('famous_doctors',[ApiPatientController::class,'famous_doctors']);
+    ################################# Appointment Apis ########################################
+    Route::post('appointment-store',[ApiAppointmentController::class,'appointment_store']);
+    Route::get('patient-appointments',[ApiAppointmentController::class,'pat_appoints']);
+    Route::get('doctor-appointments',[ApiAppointmentController::class,'doc_appoints']);
+    Route::get('patient-upcoming-appointments',[ApiAppointmentController::class,'pat_upcoming_appoints']);
+    Route::get('doctor-upcoming-appointments',[ApiAppointmentController::class,'doc_upcoming_appoints']);
+    Route::get('cancel-appointment/{id}',[ApiAppointmentController::class,'cancel_appoint']);
+    Route::get('confirm-appointment/{id}',[ApiAppointmentController::class,'confirm_appoint']);
+    Route::get('today-appointments',[ApiAppointmentController::class,'today_appoints']);
+    #############################################################################################
 });
 
 

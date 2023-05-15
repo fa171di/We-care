@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('expert_available_slots', function (Blueprint $table) {
+        Schema::create('doctor_available_slots', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('expert_id');
-            //$table->unsignedBigInteger('expert_available_time_id');
+            $table->unsignedBigInteger('doctor_id');
             $table->time('from');
             $table->time('to');
             $table->tinyInteger('is_deleted')->default(0)->comment('0=>active,1=>inactive');
-            $table->foreign('expert_id')->references('id')->on('users');
-            //$table->foreign('expert_available_time_id')->references('id')->on('expert_available_times');
+            $table->foreign('doctor_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
