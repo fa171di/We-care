@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\Front\ApiPatientController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('home',[ApiAuthController::class,'home']);
 });
 #########################################################################################
-
+Route::middleware('auth:api')->group(function (){
+    Route::get('departments',[ApiPatientController::class,'departments']);
+    Route::get('famous_doctors',[ApiPatientController::class,'famous_doctors']);
+});
 
 
 
