@@ -154,6 +154,28 @@ class DoctorRepository implements IDoctorRepository
                     'sat'=>$sat,
                 ]);
 //                // Doctor available Slots here
+                $slot_time = $request->slot_time;
+                $start_datetime = Carbon::parse($request->from_time)->format('H:i:s');
+                $end_datetime = Carbon::parse($request->to_time)->format('H:i:s');
+                $start_datetime_carbon = Carbon::parse($request->from_time);
+                $end_datetime_carbon = Carbon::parse($request->to_time);
+                $totalDuration = $end_datetime_carbon->diffInMinutes($start_datetime_carbon);
+                $totalSlots = $totalDuration / $slot_time;
+                for ($a = 0; $a <= $totalSlots; $a++) {
+                    $slot_time_start_min = $a * $slot_time;
+                    $slot_time_end_min = $slot_time_start_min + $slot_time;
+                    $slot_time_start = Carbon::parse($start_datetime)->addMinute($slot_time_start_min)->format('H:i:s');
+                    $slot_time_end = Carbon::parse($start_datetime)->addMinute($slot_time_end_min)->format('H:i:s');
+                    if ($slot_time_end <= $end_datetime) {
+                        // add time slot here
+                        $time = $slot_time_start . '<=' . $slot_time_end . '<br>';
+                        $availableSlot = new DoctorAvailableSlot();
+                        $availableSlot->doctor_id = $doctor->id;
+                        $availableSlot->from = $slot_time_start;
+                        $availableSlot->to = $slot_time_end;
+                        $availableSlot->save();
+                    }
+                }
             });
             DB::commit();
         } catch (\Exception $ex) {
