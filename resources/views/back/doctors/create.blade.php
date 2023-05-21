@@ -158,7 +158,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row mg-b-20">
                     <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
                         <x-forms.label id=""><span class="">حالة التميز : </span></x-forms.label>
@@ -166,6 +165,50 @@
                             <option value="0">معروف</option>
                             <option value="1">غير معروف</option>
                         </select>
+                    </div>
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0">
+                        <label class="control-label d-block">أيام الدوام :<span
+                                class="text-danger">*</span></label>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="inlineCheckbox1">الأحد</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                   value="1" name="sun" {{ old('sun') ? 'checked' : '' }}>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="inlineCheckbox2">الأثنين</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
+                                   value="1" name="mon" {{ old('mon') ? 'checked' : '' }}>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="inlineCheckbox3">الثلاثاء</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
+                                   value="1" name="tue" {{ old('tue') ? 'checked' : '' }}>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="inlineCheckbox4">الأربعاء</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox4"
+                                   value="1" name="wen" {{ old('wen') ? 'checked' : '' }}>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="inlineCheckbox5">الخميس</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox5"
+                                   value="1" name="thu" {{ old('thu') ? 'checked' : '' }}>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="inlineCheckbox6">الجمعة</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox6"
+                                   value="1" name="fri" {{ old('fri') ? 'checked' : '' }}>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="inlineCheckbox7">السبت</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox7"
+                                   value="1" name="sat" {{ old('sat') ? 'checked' : '' }}>
+                        </div>
+                        @error('mon')
+                        <span class="error d-block " role="alert">
+                                                    <strong>اختر أي يوم</strong>
+                                                </span>
+                        @enderror
                     </div>
                 </div>
 

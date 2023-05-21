@@ -13,7 +13,6 @@ class DoctorAvailableSlot extends Model
 
     protected $fillable = [
         'doctor_id',
-        'doctor_available_time_id',
         'from',
         'to',
         'is_deleted'

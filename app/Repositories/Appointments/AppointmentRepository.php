@@ -72,19 +72,18 @@ class AppointmentRepository implements IAppointmentRepository
 
     public function update(Request $request, Appointment $appointment)
     {
-        //dd($doctor);
+        $date = $request->appointment_date;
+        $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
         try {
-            DB::transaction(function () use ($request) {
-                $doctor = doctors::findOrFail($request->doctor_id);
-                $new_image = $this->ReplaceImg($doctor,$request,'photo','doctors');
-                $doctor->act = $request->act;
-                $doctor->name_ar = $request->name_ar;
-                $doctor->from_time =$request->from_time;
-                $doctor->to_time=$request->to_time;
-                $doctor->slot_time=$request->slot_time;
-                $doctor->user_id=$request->user_id;
+            DB::transaction(function () use ($request,$appointment,$newDate) {
+                $appoint = Appointment::findOrFail($appointment)->get();
+                $appoint->appointment_for = $request->appointment_for;
+                $appoint->appointment_with = $request->appointment_with;
+                $appoint->from_time =$request->from_time;
+                $appoint->to_time=$request->to_time;
+                $appoint->slot_time=$request->slot_time;
+                $appoint->user_id=$request->user_id;
                 $doctor->phone_number=$request->phone_number;
-                $doctor->photo=$new_image;
                 $doctor->subgrp= $request->subgrp;
                 $doctor->sex=$request->sex;
                 $doctor->specialization_ar=$request->specialization_ar;
@@ -93,7 +92,6 @@ class AppointmentRepository implements IAppointmentRepository
             DB::commit();
         } catch (\Exception $ex) {
             DB::rollback();
-            return redirect()->back()->with(['error' => $ex]);
         }
 
     }
@@ -118,18 +116,13 @@ class AppointmentRepository implements IAppointmentRepository
         }
     }
 
-    public function destroy($doctors)
+    public function destroy($appointment)
     {
         try {
-            DB::transaction(function () use ($doctors) {
-                $doctor = doctors::findOrFail($doctors)->get();
-                if ($doctor->photo !== ""){
-                    unlink(public_path('img/'.$doctor->photo));
-                }
-                doctors::find($doctors)->delete();
-                if ($doctor->user_id !== ""){
-                    User::find($doctor->user_id)->delete();
-                }
+            DB::transaction(function () use ($appointment) {
+                $appoint = Appointment::findOrFail($appointment)->get();
+                    $appoint->is_deleted=1;
+                    $appoint->save();
             });
             DB::commit();
         } catch (\Exception $ex) {

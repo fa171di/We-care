@@ -23,7 +23,6 @@ return new class extends Migration
             $table->tinyInteger('thu')->default(0)->comment('0=>not available,1=>available');
             $table->tinyInteger('fri')->default(0)->comment('0=>not available,1=>available');
             $table->tinyInteger('sat')->default(0)->comment('0=>not available,1=>available');
-            $table->foreign('doctor_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

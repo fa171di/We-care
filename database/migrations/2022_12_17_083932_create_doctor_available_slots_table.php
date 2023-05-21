@@ -19,7 +19,6 @@ return new class extends Migration
             $table->time('from');
             $table->time('to');
             $table->tinyInteger('is_deleted')->default(0)->comment('0=>active,1=>inactive');
-            $table->foreign('doctor_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

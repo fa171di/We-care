@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
+use App\Models\back\DoctorAvailableDay;
 use App\Models\back\doctors;
 use App\Models\User;
 use App\Repositories\Doctors\IDoctorRepository;
@@ -47,12 +48,12 @@ class DoctorsController extends Controller
      */
     public function store(Request $request)
     {
-
-       // $clean_data1 = $request->validate(User::rules(), User::messages());
-        //$clean_data = $request->validate(doctors::rules(), doctors::messages());
+        $clean_data1 = $request->validate(User::rules(), User::messages());
+        $clean_data = $request->validate(doctors::rules(), doctors::messages());
+        $clean_data2 = $request->validate(DoctorAvailableDay::rules(), DoctorAvailableDay::messages());
         try {
             $this->DoctorRepository->store($request);
-            return Redirect()->back()->with('success', ' updated!');
+            return Redirect()->back()->with('success', ' updated!!!');
         } catch (\Exception $ex) {
             return redirect()->back()->with(['error' => $ex]);
 
