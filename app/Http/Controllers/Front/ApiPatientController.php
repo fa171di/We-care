@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Repositories\Doctors\IDoctorRepository;
+use App\Repositories\Patients\IPatientRepository;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,10 +18,12 @@ class ApiPatientController extends Controller
     private IDoctorRepository $DoctorRepository;
 
 
-    public function __construct(IClinicRepository $clinic,IDoctorRepository $DoctorRepository)
+    public function __construct(IClinicRepository $clinic,IDoctorRepository $DoctorRepository,IPatientRepository $patientRepository)
     {
         $this->ClinicRepository = $clinic;
         $this->DoctorRepository = $DoctorRepository;
+        $this->PatientRepository = $patientRepository;
+
     }
 
     public function departments():JsonResponse{
@@ -31,6 +34,25 @@ class ApiPatientController extends Controller
         }else
         return $this->returnData("departments",$departments);
 
+    }
+
+    public function cities():JsonResponse{
+
+        $cities = $this->PatientRepository->cities();
+        if (!$cities){
+            return $this->returnError("E300","There are no cities..");
+        }else
+            return $this->returnData("cities",$cities);
+    }
+
+    public function areas(Request $request):JsonResponse{
+        $citie = $request->citie;
+        $areas = $this->PatientRepository->areas($citie);
+        if ($areas->count()==0){
+            return $this->returnError("E301","There are no areas..");
+        }else{
+            return $this->returnData("areas",$areas);
+        }
     }
 
     public function famous_doctors():JsonResponse{

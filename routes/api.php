@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 ##################################### Auth Apis #########################################
 Route::post('register', [ApiAuthController::class, 'register']);
 Route::post('Api_login', [ApiAuthController::class, 'login']);
+Route::get('cities',[ApiPatientController::class,'cities']);
+Route::post('areas',[ApiPatientController::class,'areas']);
 Route::middleware('auth:api')->group(function () {
     Route::post('email/verify', [ApiAuthController::class, 'verify']);
     Route::get('email/resend', [ApiAuthController::class, 'resend']);

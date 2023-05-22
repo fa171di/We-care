@@ -39,13 +39,13 @@ class DoctorAvailableDay extends Model
     public static function messages()
     {
         return [
-            'required_without_all:tue,wen,thu,fri,sat,sun' => 'you have to choice noe day at least ..',
-            'required_without_all:mon,wen,thu,fri,sat,sun' => 'you have to choice noe day at least ..',
-            'required_without_all:mon,tue,thu,fri,sat,sun' => 'you have to choice noe day at least ..',
-            'required_without_all:mon,wen,tue,fri,sat,sun' => 'you have to choice noe day at least ..',
-            'required_without_all:wen,tue,mon,thu,sat,sun' => 'you have to choice noe day at least ..',
-            'required_without_all:wen,tue,mon,thu,fri,sun' => 'you have to choice noe day at least ..',
-            'required_without_all:wen,tue,mon,thu,fri,sat' => 'you have to choice noe day at least ..',
+            'required_without_all:tue,wen,thu,fri,sat,sun' => 'you have to choice one day at least ..',
+            'required_without_all:mon,wen,thu,fri,sat,sun' => 'you have to choice one day at least ..',
+            'required_without_all:mon,tue,thu,fri,sat,sun' => 'you have to choice one day at least ..',
+            'required_without_all:mon,wen,tue,fri,sat,sun' => 'you have to choice one day at least ..',
+            'required_without_all:wen,tue,mon,thu,sat,sun' => 'you have to choice one day at least ..',
+            'required_without_all:wen,tue,mon,thu,fri,sun' => 'you have to choice one day at least ..',
+            'required_without_all:wen,tue,mon,thu,fri,sat' => 'you have to choice one day at least ..',
         ];
     }
 }

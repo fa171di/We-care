@@ -20,4 +20,8 @@ interface IPatientRepository
     public function store(Request $request);
 
     public function destroy($doctors);
+
+    public function cities();
+
+    public function areas($citie);
 }

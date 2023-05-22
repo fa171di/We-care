@@ -148,5 +148,13 @@ class PatientRepository implements IPatientRepository
         }*/
     }
 
+    public function cities(){
+        return gnr_m_cities::all();
+    }
+
+    public function areas($citie){
+        return gnr_m_areas::where('city',$citie)->get();
+    }
+
 
 }
