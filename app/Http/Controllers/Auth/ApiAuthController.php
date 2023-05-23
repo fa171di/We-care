@@ -108,14 +108,14 @@ class ApiAuthController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->returnError("E00",$validator->errors());
+            return $this->returnError("V00",$validator->errors());
         }
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $token= $user->createToken('MyApp')->accessToken;
-            return $this->returnData("user_token",$token, 'User login successfully.');
+            return $this->returnData("user_token",$token, 'User login successfully.',"A00");
         } else {
-            return $this->returnError('E00', 'Unauthorised');
+            return $this->returnError('A01', 'Unauthorised');
         }
     }
 

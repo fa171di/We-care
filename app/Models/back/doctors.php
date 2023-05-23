@@ -34,6 +34,10 @@ class doctors extends Model
         return $this->hasMany(cln_x_prev_com::class, 'doc','id');
     }
 
+    public function available_days(){
+        return $this->hasMany(DoctorAvailableDay::class, 'doctor_id','id');
+    }
+
     public function cln_x_prev_str(){
         return $this->hasMany(cln_x_prev_str::class, 'doc','id');
     }

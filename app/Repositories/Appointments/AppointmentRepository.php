@@ -3,6 +3,7 @@
 namespace App\Repositories\Appointments;
 
 use App\Models\back\Appointment;
+use App\Models\back\DoctorAvailableSlot;
 use App\Models\back\doctors;
 use App\Models\User;
 use App\Traits\UploadFileTrait;
@@ -68,6 +69,27 @@ class AppointmentRepository implements IAppointmentRepository
     public function show($appointment)
     {
         return $this->Appointment::with('patient','doctor');
+    }
+
+    public function doctor_available_days($doc){
+        $doctor =doctors::with('available_days')->find($doc);
+        return $doctor->available_days;
+    }
+
+    public function slots($doc,$dates){
+
+        $appointment_slot = DoctorAvailableSlot::with(['appointment' => function ($re) use ($dates) {
+            $re->where('appointment_date', $dates);
+        }])->where('doctor_id', $doc)->get();
+        $slots[]=null;
+        $i=0;
+        foreach ($appointment_slot as $slot){
+            if ($slot->appointment->count() == 0) {
+                $slots[$i] = $slot;
+                $i++;
+            }
+        }
+        return $slots;
     }
 
     public function update(Request $request, Appointment $appointment)

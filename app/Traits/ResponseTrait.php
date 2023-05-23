@@ -22,9 +22,10 @@ trait ResponseTrait
         ]);
     }
 
-    public function returnData($key,$value,$msg=""){
+    public function returnData($key,$value,$msg="",$errNum="S00"){
         return response()->json([
             'success' => true,
+            'error' => $errNum,
             $key => $value,
             'msg' => $msg
         ]);

@@ -4,6 +4,7 @@ namespace App\Models\back;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
@@ -22,6 +23,11 @@ class DoctorAvailableDay extends Model
         'fri',
         'sat'
     ];
+
+    public function doctor(): BelongsTo
+    {
+        return $this->belongsTo(doctors::class,'doctor_id', 'id')->withDefault();
+    }
 
     public static function rules($id = 0)
     {

@@ -19,6 +19,10 @@ interface IAppointmentRepository
 
     public function show($appointment);
 
+    public function doctor_available_days($doc);
+
+    public function slots($doc,$dates);
+
     public function update(Request $request, Appointment $appointment);
 
     public function store(Request $request);
