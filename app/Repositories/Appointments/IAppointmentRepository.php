@@ -23,10 +23,12 @@ interface IAppointmentRepository
 
     public function slots($doc,$dates);
 
-    public function update(Request $request, Appointment $appointment);
+    public function update($input, Appointment $appointment);
 
     public function store($input);
 
     public function destroy($appointment);
+
+    public function cancel_appoint($appointment);
 
 }

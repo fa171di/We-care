@@ -37,11 +37,13 @@ Route::middleware('auth:api')->group(function (){
     Route::post('doctor_available_days',[ApiAppointmentController::class,'doctor_available_days']);
     Route::post('slots',[ApiAppointmentController::class,'slots_by_day']);
     Route::post('appointment-store',[ApiAppointmentController::class,'appointment_store']);
+    Route::post('appointment-update',[ApiAppointmentController::class,'appointment_update']);
     Route::get('patient-appointments',[ApiAppointmentController::class,'pat_appoints']);
     Route::get('doctor-appointments',[ApiAppointmentController::class,'doc_appoints']);
-    Route::get('patient-canceled-appointments',[ApiAppointmentController::class,'pat_upcoming_appoints']);
-    Route::get('doctor-today-appointments',[ApiAppointmentController::class,'doc_upcoming_appoints']);
+    Route::get('patient-canceled-appointments',[ApiAppointmentController::class,'pat_canceled_appoints']);
+    Route::get('doctor-today-appointments',[ApiAppointmentController::class,'doc_today_appoints']);
     Route::post('cancel-appointment',[ApiAppointmentController::class,'cancel_appoint']);
+    Route::post('appointment-delete',[ApiAppointmentController::class,'appointment_delete']);
     #############################################################################################
 });
 
