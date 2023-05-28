@@ -14,10 +14,10 @@ trait ResponseTrait
         ]);
     }
 
-    public function returnSuccess($msg=""){
+    public function returnSuccess($errNum="",$msg=""){
         return response()->json([
             'success' => true,
-            'error' => 0,
+            'error' => $errNum,
             'msg' => $msg
         ]);
     }

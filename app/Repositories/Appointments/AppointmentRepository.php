@@ -101,15 +101,9 @@ class AppointmentRepository implements IAppointmentRepository
                 $appoint = Appointment::findOrFail($appointment)->get();
                 $appoint->appointment_for = $request->appointment_for;
                 $appoint->appointment_with = $request->appointment_with;
-                $appoint->from_time =$request->from_time;
-                $appoint->to_time=$request->to_time;
+                $appoint->appointment_date = $newDate;
                 $appoint->slot_time=$request->slot_time;
-                $appoint->user_id=$request->user_id;
-                $doctor->phone_number=$request->phone_number;
-                $doctor->subgrp= $request->subgrp;
-                $doctor->sex=$request->sex;
-                $doctor->specialization_ar=$request->specialization_ar;
-                $doctor->save();
+                $appoint->save();
             });
             DB::commit();
         } catch (\Exception $ex) {
@@ -118,18 +112,17 @@ class AppointmentRepository implements IAppointmentRepository
 
     }
 
-    public function store(Request $request)
+    public function store($input)
     {
-        $date = $request->appointment_date;
+        $date = $input['appointment_date'];
         $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
         try {
-            DB::transaction(function () use ($request,$newDate) {
+            DB::transaction(function () use ($input,$newDate) {
                 Appointment::create([
-                    'appointment_for' => $request->appointment_for,
-                    'appointment_with' => $request->appointment_with,
+                    'appointment_for' =>$input['appointment_for'],
+                    'appointment_with' => $input['appointment_with'],
                     'appointment_date' => $newDate,
-                    'available_time' => $request->available_time,
-                    'available_slot' => $request->available_slot,
+                    'available_slot' => $input['available_slot'],
                 ]);
             });
             DB::commit();

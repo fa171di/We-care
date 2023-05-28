@@ -59,16 +59,11 @@ class ApiPatientController extends Controller
 
         $famous_doctors = $this->DoctorRepository->getFamousDoctors();
         if ($famous_doctors->count()==0){
-            return $this->returnSuccess("There are no Famous Doctors..");
+            return $this->returnSuccess("D01","There are no Famous Doctors..");
         }else
-            return $this->returnData("famous doctors",$famous_doctors);
+            return $this->returnData("famous doctors",$famous_doctors,"","D00");
 
     }
-
-//    public function update(Request $request):JsonResponse{
-//
-//    }
-
 
 
 }

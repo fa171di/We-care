@@ -9,6 +9,7 @@ use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class ApiAppointmentController extends Controller
 {
@@ -48,5 +49,50 @@ class ApiAppointmentController extends Controller
             }
         }
     }
+
+    public function appointment_store(Request $request):JsonResponse
+    {
+        $user = auth()->user();
+        $role = $user->roles_name;
+        $userId = $user->id;
+        if ($role == 'Patient'){
+            $validator = Validator::make($request->all(),[
+                'appointment_with' => 'required',
+                'appointment_date' => 'required',
+                'available_slot' => 'required',
+            ]);
+        }elseif ($role == 'Doctor'){
+            $validator = Validator::make($request->all(),[
+                'appointment_for' => 'required',
+                'appointment_date' => 'required',
+                'available_slot' => 'required',
+            ]);
+        }
+        if($validator->fails()){
+            return $this->returnError("V00",$validator->errors());
+        }
+        $input = $request->all();
+        if ($role == 'Patient'){
+            $input['appointment_for'] = $userId;
+        }elseif ($role == 'Doctor'){
+            $input['appointment_with'] = $userId;
+        }
+        try {
+            $appointment = $this->AppointmentRepository->store($input);
+            return $this->returnSuccess("D00","Appointment successfully");
+        } catch (Exception $e) {
+            return $this->returnError("D01",$e->getMessage());
+        }
+    }
+
+    public function pat_appoints():JsonResponse{
+        $appointments = $this->AppointmentRepository->pat_appoints();
+        if (!$appointments){
+            return $this->returnData("upcoming_Appointment",$appointments,"","D00");
+        }else{
+            return $this->returnError("D01","There are no appointments..");
+        }
+    }
+
 
 }

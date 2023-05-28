@@ -25,7 +25,7 @@ interface IAppointmentRepository
 
     public function update(Request $request, Appointment $appointment);
 
-    public function store(Request $request);
+    public function store($input);
 
     public function destroy($appointment);
 
