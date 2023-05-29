@@ -31,7 +31,6 @@ class ApiAuthController extends Controller
             'password' => 'required',
             'c_password' => 'required|same:password',
             'mother_name' => 'required',
-            'plc_birth' => 'required',
             'mobile' => 'required',
             'birth_date' => 'required',
             'sex' => 'required',
@@ -66,7 +65,6 @@ class ApiAuthController extends Controller
                 $patient = gnr_m_patients::create([
                     'f_name'=>$user->name,
                     'mother_name'=>$input['mother_name'],
-                    'plc_birth'=>$input['plc_birth'],
                     'mobile'=>$input['mobile'],
                     'birth_date'=>$input['birth_date'],
                     'sex'=>$input['sex'],
@@ -74,7 +72,7 @@ class ApiAuthController extends Controller
                     'p_city'=>$input['p_city'],
                     'p_area'=>$input['p_area'],
                     'nationality'=>$input['nationality'],
-                    'address'=>$address . $input['address'],
+                    'address'=>$address->name . $input['address'],
                     'user_id'=>$user->id,
                 ]);
             });
@@ -150,6 +148,19 @@ class ApiAuthController extends Controller
                 $doctor = User::with('doctor')->find($user->id);
                 return $this->returnData("user",$doctor,'doctor');
 
+    }
+
+    public function profile():JsonResponse{
+        $user = auth()->user();
+        $role = $user->roles_name;
+        $id = $user->id;
+        if ($role == 'Patient'){
+            $patient = gnr_m_patients::with('user')->where('user_id',$id)->first();
+            return $this->returnData("patient",$patient,"patient","D00");
+        }elseif ($role == 'Doctor'){
+            $doctor = doctors::with('user')->where('user_id',$id)->first();
+            return $this->returnData("doctor",$doctor,"doctor","D00");
+        }
     }
 
     public function sendMail($user, $token)

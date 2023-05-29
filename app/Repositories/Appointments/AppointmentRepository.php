@@ -22,6 +22,7 @@ class AppointmentRepository implements IAppointmentRepository
     {
         $this->Appointment = $appointment;
     }
+
     public function pat_appoints(){
         $user = auth()->user();
         $user_id = $user->id;
@@ -134,16 +135,9 @@ class AppointmentRepository implements IAppointmentRepository
 
     public function destroy($appointment)
     {
-        try {
-            DB::transaction(function () use ($appointment) {
-                $appoint = Appointment::findOrFail($appointment)->get();
-                    $appoint->is_deleted=1;
-                    $appoint->save();
-            });
-            DB::commit();
-        } catch (\Exception $ex) {
-            DB::rollback();
-        }
+        $appoint = Appointment::find($appointment->id);
+        $appoint->is_deleted=1;
+        $appoint->save();
     }
 
     public function cancel_appoint($appointment)

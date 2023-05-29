@@ -40,18 +40,18 @@ class ApiPatientController extends Controller
 
         $cities = $this->PatientRepository->cities();
         if (!$cities){
-            return $this->returnError("E300","There are no cities..");
+            return $this->returnError("D01","There are no cities..");
         }else
-            return $this->returnData("cities",$cities);
+            return $this->returnData("cities",$cities,"","D00");
     }
 
     public function areas(Request $request):JsonResponse{
         $citie = $request->citie;
         $areas = $this->PatientRepository->areas($citie);
         if ($areas->count()==0){
-            return $this->returnError("E301","There are no areas..");
+            return $this->returnError("D01","There are no areas..");
         }else{
-            return $this->returnData("areas",$areas);
+            return $this->returnData("areas",$areas,"","D00");
         }
     }
 

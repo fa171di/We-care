@@ -28,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('email/resend', [ApiAuthController::class, 'resend']);
     Route::post('logout', [ApiAuthController::class, 'logout']);
     Route::get('home',[ApiAuthController::class,'home']);
+    Route::get('profile',[ApiAuthController::class,'profile']);
 });
 #########################################################################################
 Route::middleware('auth:api')->group(function (){

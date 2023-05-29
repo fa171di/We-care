@@ -188,7 +188,7 @@ class ApiAppointmentController extends Controller
         if (!$appointment){
             return $this->returnError("D01","appointment not exist..");
         }
-        $this->AppointmentRepository->destroy($appointment);
+       $appoint = $this->AppointmentRepository->destroy($appointment);
         return $this->returnSuccess("D00","appointment deleted successfully..");
     }
 
