@@ -30,15 +30,12 @@ class ApiAuthController extends Controller
             'password' => 'required',
             'c_password' => 'required|same:password',
             'mother_name' => 'required',
-            'plc_birth' => 'required',
             'mobile' => 'required',
             'birth_date' => 'required',
             'sex' => 'required',
             'blood' => 'required',
             'p_city' => 'required',
             'p_area' => 'required',
-            'marital_status' => 'required',
-            'title' => 'required',
             'nationality' => 'required',
             'address' => 'required',
         ]);
@@ -48,32 +45,32 @@ class ApiAuthController extends Controller
         }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $verificationCode = mt_rand(1000,9999);//Str::random_int(4);
+         $verificationCode = mt_rand(1000,9999);//Str::random_int(4);
         $input['verification_code'] = $verificationCode;
         $input['roles_name'] = 'Patient';
         $input['Status'] = 'مفعل';
         try {
             DB::transaction(function () use($input){
+        
                 $user = User::create([
                     'name' => $input['name'],
                     'email'=>$input['email'],
                     'password'=>$input['password'],
-                    'verification_code'=>$input['verification_code'],
+                    'verification_code'=> $input['verification_code']  ,
                     'roles_name'=>$input['roles_name'],
                     'Status'=>$input['Status'],
                 ]);
+                
                 $patient = gnr_m_patients::create([
-                    'f_name'=>$user->name,
+
+                    'f_name'=>$input['name'],
                     'mother_name'=>$input['mother_name'],
-                    'plc_birth'=>$input['plc_birth'],
                     'mobile'=>$input['mobile'],
                     'birth_date'=>$input['birth_date'],
                     'sex'=>$input['sex'],
                     'blood'=>$input['blood'],
                     'p_city'=>$input['p_city'],
                     'p_area'=>$input['p_area'],
-                    'marital_status'=>$input['marital_status'],
-                    'title'=>$input['title'],
                     'nationality'=>$input['nationality'],
                     'address'=>$input['address'],
                     'user_id'=>$user->id,

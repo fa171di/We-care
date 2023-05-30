@@ -12,12 +12,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class gnr_m_patients extends Model
 {
     use HasFactory;
-    protected $fillable = ['f_name', 'l_name', 'ft_name',
+    protected $fillable = ['l_name','f_name', 'ft_name',
         'mother_name','plc_birth','mobile','birth_date','sex',
         'phone','date','blood','p_city', 'p_area',
         'marital_status','title','nationality','address','user_id'];
     protected $table = 'gnr_m_patients';
-
+    public $timestamps = FALSE;
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class,'user_id', 'id')->withDefault();
