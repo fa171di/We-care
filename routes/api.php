@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\Front\ApiAppointmentController;
 use App\Http\Controllers\Front\ApiPatientController;
+use App\Http\Controllers\Front\ApiDoctorController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::middleware('auth:api')->group(function () {
 Route::middleware('auth:api')->group(function (){
     Route::get('departments',[ApiPatientController::class,'departments']);
     Route::get('famous_doctors',[ApiPatientController::class,'famous_doctors']);
+    Route::post('doctors_by_dep',[ApiDoctorController::class,'dep_doctor']);
     ################################# Appointment Apis ########################################
     Route::post('doctor_available_days',[ApiAppointmentController::class,'doctor_available_days']);
     Route::post('slots',[ApiAppointmentController::class,'slots_by_day']);
