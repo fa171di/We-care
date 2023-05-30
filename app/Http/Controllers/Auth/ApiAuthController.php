@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\back\doctors;
+use App\Models\back\gnr_m_areas;
 use App\Models\back\gnr_m_patients;
 use App\Models\User;
 use App\Traits\ResponseTrait;
@@ -41,9 +42,11 @@ class ApiAuthController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->returnError("E00",$validator->errors());
+            return $this->returnError("V00",$validator->errors());
         }
         $input = $request->all();
+        $area = $input['p_area'];
+        $address = gnr_m_areas::find($area);
         $input['password'] = bcrypt($input['password']);
          $verificationCode = mt_rand(1000,9999);//Str::random_int(4);
         $input['verification_code'] = $verificationCode;
@@ -51,7 +54,6 @@ class ApiAuthController extends Controller
         $input['Status'] = 'مفعل';
         try {
             DB::transaction(function () use($input){
-        
                 $user = User::create([
                     'name' => $input['name'],
                     'email'=>$input['email'],
@@ -72,7 +74,7 @@ class ApiAuthController extends Controller
                     'p_city'=>$input['p_city'],
                     'p_area'=>$input['p_area'],
                     'nationality'=>$input['nationality'],
-                    'address'=>$input['address'],
+                    'address'=>$address->name . $input['address'],
                     'user_id'=>$user->id,
                 ]);
             });
@@ -88,11 +90,11 @@ class ApiAuthController extends Controller
             }
             $token =  $user->createToken('Personal Access Token')->accessToken;
             $this->sendMail($user, $input['verification_code']);
-            return $this->returnData("user_token",$token, 'registered successfully.,check your email to get verification code');
+            return $this->returnData("user_token",$token, 'registered successfully.,check your email to get verification code',"D00");
         }
         catch (\Exception $ex){
             DB::rollback();
-            return $this->returnError("D00",$ex->getMessage());
+            return $this->returnError("D01",$ex->getMessage());
         }
 
     }
@@ -112,7 +114,7 @@ class ApiAuthController extends Controller
             $token= $user->createToken('MyApp')->accessToken;
             return $this->returnData("user_token",$token, 'User login successfully.',"A00");
         } else {
-            return $this->returnError('A01', 'Unauthorised');
+            return $this->returnError('A01', 'Email or Password not correct');
         }
     }
 
@@ -148,6 +150,19 @@ class ApiAuthController extends Controller
                 $doctor = User::with('doctor')->find($user->id);
                 return $this->returnData("user",$doctor,'doctor');
 
+    }
+
+    public function profile():JsonResponse{
+        $user = auth()->user();
+        $role = $user->roles_name;
+        $id = $user->id;
+        if ($role == 'Patient'){
+            $patient = gnr_m_patients::with('user')->where('user_id',$id)->first();
+            return $this->returnData("patient",$patient,"patient","D00");
+        }elseif ($role == 'Doctor'){
+            $doctor = doctors::with('user')->where('user_id',$id)->first();
+            return $this->returnData("doctor",$doctor,"doctor","D00");
+        }
     }
 
     public function sendMail($user, $token)

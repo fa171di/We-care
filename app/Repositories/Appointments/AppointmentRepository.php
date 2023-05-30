@@ -6,6 +6,7 @@ use App\Models\back\Appointment;
 use App\Models\back\DoctorAvailableSlot;
 use App\Models\back\doctors;
 use App\Models\User;
+use App\Traits\ResponseTrait;
 use App\Traits\UploadFileTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 class AppointmentRepository implements IAppointmentRepository
 {
     use UploadFileTrait;
+    use ResponseTrait;
     public $appointment;
 
     public function __construct(Appointment $appointment)
@@ -92,24 +94,18 @@ class AppointmentRepository implements IAppointmentRepository
         return $slots;
     }
 
-    public function update(Request $request, Appointment $appointment)
+    public function update($input, Appointment $appointment)
     {
-        $date = $request->appointment_date;
+        $date = $input['appointment_date'];
         $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
         try {
-            DB::transaction(function () use ($request,$appointment,$newDate) {
+            DB::transaction(function () use ($input,$appointment,$newDate) {
                 $appoint = Appointment::findOrFail($appointment)->get();
-                $appoint->appointment_for = $request->appointment_for;
-                $appoint->appointment_with = $request->appointment_with;
-                $appoint->from_time =$request->from_time;
-                $appoint->to_time=$request->to_time;
-                $appoint->slot_time=$request->slot_time;
-                $appoint->user_id=$request->user_id;
-                $doctor->phone_number=$request->phone_number;
-                $doctor->subgrp= $request->subgrp;
-                $doctor->sex=$request->sex;
-                $doctor->specialization_ar=$request->specialization_ar;
-                $doctor->save();
+                $appoint->appointment_for =$input['appointment_for'];
+                $appoint->appointment_with =$input['appointment_with'];
+                $appoint->appointment_date = $newDate;
+                $appoint->slot_time=$input['slot_time'];
+                $appoint->save();
             });
             DB::commit();
         } catch (\Exception $ex) {
@@ -118,18 +114,17 @@ class AppointmentRepository implements IAppointmentRepository
 
     }
 
-    public function store(Request $request)
+    public function store($input)
     {
-        $date = $request->appointment_date;
+        $date = $input['appointment_date'];
         $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
         try {
-            DB::transaction(function () use ($request,$newDate) {
+            DB::transaction(function () use ($input,$newDate) {
                 Appointment::create([
-                    'appointment_for' => $request->appointment_for,
-                    'appointment_with' => $request->appointment_with,
+                    'appointment_for' =>$input['appointment_for'],
+                    'appointment_with' => $input['appointment_with'],
                     'appointment_date' => $newDate,
-                    'available_time' => $request->available_time,
-                    'available_slot' => $request->available_slot,
+                    'available_slot' => $input['available_slot'],
                 ]);
             });
             DB::commit();
@@ -140,17 +135,16 @@ class AppointmentRepository implements IAppointmentRepository
 
     public function destroy($appointment)
     {
-        try {
-            DB::transaction(function () use ($appointment) {
-                $appoint = Appointment::findOrFail($appointment)->get();
-                    $appoint->is_deleted=1;
-                    $appoint->save();
-            });
-            DB::commit();
-        } catch (\Exception $ex) {
-            DB::rollback();
-        }
+        $appoint = Appointment::find($appointment->id);
+        $appoint->is_deleted=1;
+        $appoint->save();
     }
 
-
+    public function cancel_appoint($appointment)
+    {
+            $appoint = Appointment::find($appointment);
+            $appoint->status=1;
+            $appoint->save();
+            return $appoint;
+    }
 }
