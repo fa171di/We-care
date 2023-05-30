@@ -45,8 +45,6 @@ class ApiAuthController extends Controller
             return $this->returnError("V00",$validator->errors());
         }
         $input = $request->all();
-        $area = $input['p_area'];
-        $address = gnr_m_areas::find($area);
         $input['password'] = bcrypt($input['password']);
          $verificationCode = mt_rand(1000,9999);//Str::random_int(4);
         $input['verification_code'] = $verificationCode;
@@ -62,7 +60,7 @@ class ApiAuthController extends Controller
                     'roles_name'=>$input['roles_name'],
                     'Status'=>$input['Status'],
                 ]);
-                
+
                 $patient = gnr_m_patients::create([
 
                     'f_name'=>$input['name'],
@@ -74,7 +72,7 @@ class ApiAuthController extends Controller
                     'p_city'=>$input['p_city'],
                     'p_area'=>$input['p_area'],
                     'nationality'=>$input['nationality'],
-                    'address'=>$address->name . $input['address'],
+                    'address'=>$input['address'],
                     'user_id'=>$user->id,
                 ]);
             });
