@@ -36,7 +36,6 @@ class ApiAuthController extends Controller
             'sex' => 'required',
             'blood' => 'required',
             'p_city' => 'required',
-            'p_area' => 'required',
             'nationality' => 'required',
             'address' => 'required',
         ]);
@@ -70,7 +69,6 @@ class ApiAuthController extends Controller
                     'sex'=>$input['sex'],
                     'blood'=>$input['blood'],
                     'p_city'=>$input['p_city'],
-                    'p_area'=>$input['p_area'],
                     'nationality'=>$input['nationality'],
                     'address'=>$input['address'],
                     'user_id'=>$user->id,
