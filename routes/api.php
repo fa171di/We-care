@@ -36,6 +36,7 @@ Route::middleware('auth:api')->group(function (){
     Route::get('departments',[ApiPatientController::class,'departments']);
     Route::get('famous_doctors',[ApiPatientController::class,'famous_doctors']);
     Route::post('doctors_by_department',[ApiDoctorController::class,'dep_doctor']);
+    Route::post('search',[ApiDoctorController::class,'search']);
     ################################# Appointment Apis ########################################
     Route::post('doctor_available_days',[ApiAppointmentController::class,'doctor_available_days']);
     Route::post('slots',[ApiAppointmentController::class,'slots_by_day']);

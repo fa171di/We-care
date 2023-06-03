@@ -34,9 +34,8 @@ class DoctorRepository implements IDoctorRepository
 
     public function getFamousDoctors(){
         return doctors::with('user','gnr_m_clinics')
-            ->where('famous' ,'=',0)->get();
+            ->where('famous' ,'=',1)->get();
     }
-
 
     public function show($department)
     {
@@ -181,6 +180,19 @@ class DoctorRepository implements IDoctorRepository
         } catch (\Exception $ex) {
             DB::rollback();
         }
+    }
+
+    public function search($key){
+        $query = doctors::query()->join('users','doctors.user_id','=','users.id')
+            ->join('gnr_m_clinics','doctors.subgrp','=','gnr_m_clinics.id')
+            ->select('doctors.id','users.id','doctors.name_ar','specialization_ar','gnr_m_clinics.name_ar',
+                'photo','sex')->orderBy('id');
+        $columns = ['doctors.name_ar','specialization_ar','gnr_m_clinics.name_ar',];
+        foreach ($columns as $column){
+            $query->orWhere($column,'LIKE','%' . $key . '%');
+        }
+        $result = $query->get();
+        return $result;
     }
 
     public function destroy($doctors)

@@ -130,36 +130,36 @@ class ApiAppointmentController extends Controller
     public function pat_appoints():JsonResponse{
         $appointments = $this->AppointmentRepository->pat_appoints();
         if (!$appointments){
-            return $this->returnData("upcoming_Appointment",$appointments,"","D00");
-        }else{
             return $this->returnError("D01","There are no appointments..");
+        }else{
+            return $this->returnData("upcoming_Appointment",$appointments,"","D00");
         }
     }
 
     public function doc_appoints():JsonResponse{
         $appointments = $this->AppointmentRepository->doc_appoints();
         if (!$appointments){
-            return $this->returnData("Appointments",$appointments,"","D00");
-        }else{
             return $this->returnError("D01","There are no appointments..");
+        }else{
+            return $this->returnData("Appointments",$appointments,"","D00");
         }
     }
 
     public function doc_today_appoints():JsonResponse{
         $appointments = $this->AppointmentRepository->doc_today_appoints();
         if (!$appointments){
-            return $this->returnData("Appointments",$appointments,"","D00");
-        }else{
             return $this->returnError("D01","There are no appointments..");
+        }else{
+            return $this->returnData("Appointments",$appointments,"","D00");
         }
     }
 
     public function pat_canceled_appoints():JsonResponse{
         $appointments = $this->AppointmentRepository->pat_canceled_appoints();
         if (!$appointments){
-            return $this->returnData("Appointments",$appointments,"","D00");
-        }else{
             return $this->returnError("D01","There are no appointments..");
+        }else{
+            return $this->returnData("Appointments",$appointments,"","D00");
         }
     }
 

@@ -26,10 +26,10 @@ class AppointmentRepository implements IAppointmentRepository
     public function pat_appoints(){
         $user = auth()->user();
         $user_id = $user->id;
-        $today = Carbon::today()->format('Y/m/d');
+        $today = Carbon::today()->format('Y-m-d');
         return Appointment::with('doctor','timeSlot')
             ->where('appointment_for', $user_id)
-            ->whereDate('appointment_date', '>=', $today)
+            ->whereDate('appointment_date', '>',$today)
             ->where('status', 0)->get();
     }
 

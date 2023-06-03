@@ -20,6 +20,8 @@ interface IDoctorRepository
 
     public function store(Request $request);
 
+    public function search($key);
+
     public function destroy($doctors);
 
 }

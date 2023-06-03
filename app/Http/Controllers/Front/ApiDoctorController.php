@@ -10,6 +10,7 @@ use App\Repositories\Patients\IPatientRepository;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
 
 class ApiDoctorController extends Controller
 {
@@ -34,6 +35,24 @@ class ApiDoctorController extends Controller
             return $this->returnData("doctors",$doctors,"","D00");
         }
 
+    }
+
+    public function search(Request $request):JsonResponse{
+        $validator = Validator::make($request->all(), [
+            'val' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->returnError("V00",$validator->errors());
+        }
+        $key = $request->val;
+        $doctors = $this->DoctorRepository->search($key);
+        if (!$doctors){
+            return $this->returnError("D01","there are no results");
+        }
+        else{
+            return $this->returnData("doctors",$doctors,"","D00");
+        }
     }
 
 
