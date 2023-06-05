@@ -18,11 +18,22 @@
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
+
+
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الزيارات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة
-                زيارات المريض</span>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style2">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/' . $page='dashboard') }}">الصفحة الرئيسية</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/' . $page='patients') }}">المرضى</a>
+                        </li>
+                        <li class="breadcrumb-item active">زيارات المريض</li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </div>
@@ -49,7 +60,7 @@
                 <div class="card-header pb-0">
                     <div class="col-sm-1 col-md-2">
                         <a class="btn btn-primary btn-sm" data-effect="effect-scale"
-                           data-user_id="{{$visits[0]->patient}}"
+                           data-user_id="{{$patient}}"
                            data-toggle="modal" href="#modaldemo9" title="اضافة"><i
                                 class="las la-pen-fancy"></i> اضافة زيارة </a>
                     </div>
@@ -64,32 +75,39 @@
                                 <th class="wd-15p border-bottom-0">حالتها</th>
                                 <th class="wd-20p border-bottom-0">بداية الزيارة</th>
                                 <th class="wd-15p border-bottom-0">ملاحظة</th>
+                                <th class="wd-15p border-bottom-0">التكلفة</th>
                                 <th class="wd-15p border-bottom-0">العمليات</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="">
                             @foreach ($visits as $key => $pat)
                                 <tr>
                                     <td>{{ $pat->gnr_m_clinics->name_ar }}</td>
                                     <td>{{ $pat->getsType() }}</td>
                                     <td>{{ $pat->d_start() }}</td>
                                     <td>{{ $pat->note }}</td>
+                                    <td><span>{{ $pat->price }}</span></td>
                                     <td>
                                         @if($pat->cln_m_services->isNotEmpty())
                                             <a href="{{ route('services.show', $pat->id) }}"
                                                class="btn btn-sm btn-success"
                                                title="استعراض الملف الطبي للزيارة"><i class="las la-eye"></i></a>
                                         @else
-                                            <a href="{{ route('MedicalFile.create', ['visit' => $pat->id,'clinic' =>$pat->gnr_m_clinics->id]) }}" class="btn btn-sm btn-primary-gradient"
+                                            <a href="{{ route('MedicalFile.create', ['visit' => $pat->id,'clinic' =>$pat->gnr_m_clinics->id,'patient'=>$pat->patient]) }}" class="btn btn-sm btn-primary-gradient"
                                                title="اضافة ملف طبي للزيارة"><i class="las la-pen"></i></a>
                                         @endif
-                                        <a href="{{ route('users.edit', $pat->id) }}" class="btn btn-sm btn-info"
+                                        <a href="{{ route('visits.edit', $pat->id) }}" class="btn btn-sm btn-info"
                                            title="تعديل"><i class="las la-edit"></i></a>
 
-                                        <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
-                                           data-user_id="{{ $pat->id }}"
-                                           data-toggle="modal" href="#modaldemo8" title="حذف"><i
-                                                class="las la-trash"></i></a>
+                                            <form action="{{ route('visits.destroy','test') }}"
+                                                  style="display:inline" method="post"
+                                                  enctype="multipart/form-data">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="input" id="user_id" value="{{ $pat->id }}">
+                                                <button type="submit" class="btn btn-sm btn-danger"><i
+                                                        class="las la-trash"></i></button>
+                                            </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -102,30 +120,6 @@
         <!--/div-->
 
         <!-- Modal effects -->
-        <div class="modal" id="modaldemo8">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content modal-content-demo">
-                    <div class="modal-header">
-                        <h6 class="modal-title">حذف المستخدم</h6>
-                        <button aria-label="Close" class="close"
-                                data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <form action="{{ route('visits.destroy','test') }}" method="post">
-                        {{ method_field('delete') }}
-                        {{ csrf_field() }}
-                        <div class="modal-body">
-                            <p>هل انت متاكد من عملية الحذف ؟</p><br>
-                            <input type="hidden" name="user_id" id="user_id" value="">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                            <button type="submit" class="btn btn-danger">تاكيد</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
         <div class="modal" id="modaldemo9">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content modal-content-demo">
@@ -139,10 +133,10 @@
                         @method('POST')
                         <div class="modal-body">
                             <p>هل تريد اضافة زيارة؟</p><br>
-                            <input type="hidden" name="user_id" id="user_id" value="">
+                            <input type="hidden" name="user_id" id="user_id" value="{{$patient}}">
 
                             <x-forms.label id=""><span class="">اختر عيادة</span></x-forms.label>
-                            <select name="clinic" class="form-control select2">
+                            <select name="clinic" class="form-control select2" requiredInput="*">
                                 <option></option>
                                 @foreach ($clinics as $key => $value)
                                     <option value="{{$value->id}}"/>{{ $value->name_ar }}</option>
@@ -151,6 +145,9 @@
 
                             <x-forms.label id=""><span class="">ادخل ملاحظة </span></x-forms.label>
                             <input class="form-control" name="note" id="" type="text">
+                            <x-forms.input label="التكلفة: " oninvalid="this.setCustomValidity('يجب ان تدخل رقم')" onchange="this.setCustomValidity('')" inputmode="numeric" pattern="[0-9]*"  class="" name="price"  />
+
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
@@ -172,6 +169,11 @@
 @endsection
 @section('js')
     <!-- Internal Data tables -->
+
+
+    <script>
+
+    </script>
     <script src="{{ URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/datatable/js/dataTables.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
@@ -190,13 +192,21 @@
     <script src="{{ URL::asset('assets/js/modal.js') }}"></script>
 
     <script>
+
+        $("#priceID").click(function(e){
+            //e.preventDefault();
+            console.log("sadad");
+            // $( this ).replaceWith('<x-forms.input id="" hidden="" name="visit" :value="'+$(this).text()+'" />');
+        });
         $('#modaldemo8').on('show.bs.modal', function (event) {
+            console.log("sadad");
             var button = $(event.relatedTarget)
             var user_id = button.data('user_id')
             var modal = $(this)
             modal.find('.modal-body #user_id').val(user_id);
         })
         $('#modaldemo9').on('show.bs.modal', function (event) {
+            console.log("sadad");
             var button = $(event.relatedTarget)
             var user_id = button.data('user_id')
             var modal = $(this)

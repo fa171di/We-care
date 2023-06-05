@@ -15,8 +15,23 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">المستخدمين</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ تعديل
-                مستخدم</span>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style2">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/' . $page='dashboard') }}">الصفحة الرئيسية</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/' . $page='patients') }}">المرضى</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('visits.show', $patient) }}">زيارات المريض</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('services.show', $visit) }}">ملف الزيارة</a>
+                        </li>
+                        <li class="breadcrumb-item active">تعديل الخدمات</li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </div>
@@ -24,98 +39,44 @@
 @endsection
 @section('content')
     <!-- row -->
-    <div class="row">
-        <div class="col-lg-12 col-md-12">
 
-            @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <button aria-label="Close" class="close" data-dismiss="alert" type="button">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <strong>خطا</strong>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+    <div class="card">
+        <div class="card-body">
+            <div class="col-lg-12 margin-tb">
+                <div class="pull-right">
+                    <div style="font-size: large;
+    padding-bottom: 10px;" class="content-title mb-0 my-auto">الخدمات المقدمة</div>
                 </div>
-            @endif
+            </div><br>
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="col-lg-12 margin-tb">
-                        <div class="pull-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('users.index') }}">رجوع</a>
-                        </div>
-                    </div><br>
+            <form id="servicesForm" action={{route('services.update', 'test')}}"" method="post" enctype="multipart/form-data">
+                @csrf
+                @method('put')
+                <x-forms.input id="visit" hidden="" name="visit" :value="$visit" />
+                <x-forms.input id="patient" hidden="" name="patient" :value="$patient" />
+                <x-forms.input id="clinic" hidden="" name="clinic" :value="$clinic" />
+                <div class="row mg-b-20">
+                    <div class="parsley-input col-md-6" id="fnWrapper">
+                        <x-forms.label id=""><span class="">الخدمات</span></x-forms.label>
+                        <select id="services" name="services[]" multiple class="form-control select2">
+                            @foreach ($services1 as $key => $value)
+                                @if (in_array($value->id,$arr))
+                                    <option value="{{ $value->id }}" selected/>{{ $value->name_ar }} - </option>
+                                @else
+                                    <option value="{{ $value->id }}"/>{{ $value->name_ar }} - </option>
+                                @endif
 
-                    <form action="{{ route('users.update', $user->id) }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        @method('put')
-                        <div class="">
-
-                            <div class="row mg-b-20">
-                                <div class="parsley-input col-md-6" id="fnWrapper">
-                                    <x-forms.input label="اسم المستخدم:"  requiredInput="*" class="required" name="name" :value="$user->name" />
-                                </div>
-
-                                <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                                    <x-forms.input label="البريد الالكتروني: " requiredInput="*" class="required" name="email" :value="$user->email" />
-
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="row mg-b-20">
-                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                                <x-forms.input label="كلمة المرور: " requiredInput="*" class="required" name="password"  />
-                            </div>
-
-                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                                <x-forms.input label="تاكيد كلمة المرور: " requiredInput="*" class="required" name="confirm-password" />
-
-                            </div>
-                        </div>
-
-                        <div class="row row-sm mg-b-20">
-                            <div class="col-lg-6">
-                                <x-forms.label id="">حالة المستخدم</x-forms.label>
-                                <x-forms.radio name="Status" :checked="$user->Status" :options="['مفعل' => 'مفعل', 'غير مفعل' => 'غير مفعل']" />
-                            </div>
-                        </div>
-
-                        <div class="row mg-b-20">
-                            <div class="col-xs-12 col-sm-12 col-md-12">
-                                <div class="form-group">
-                                    <p class="mg-b-10">نوع المستخدم</p>
-                                        <select name="roles[]" multiple class="form-control select2">
-                                        @foreach ($roles as $key => $value)
-                                            <option value="{{ $key }}"
-                                                    @isset($userRole[$key])
-                                                    selected
-                                                @endisset  />
-                                            {{ $value }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-
-                        <div class="mg-t-30">
-                            <button class="btn btn-main-primary pd-x-20" type="submit">تحديث</button>
-                        </div>
-                    </form>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
+
+                <div class="mg-t-30">
+                    <button id="ServiceSubmit" class="btn btn-main-primary pd-x-20" type="submit">اضافة</button>
+                </div>
+            </form>
         </div>
     </div>
-
 
 
 

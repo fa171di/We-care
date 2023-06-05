@@ -25,8 +25,17 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الاطباء</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ اضافة
-                طبيب</span>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style2">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/' . $page='dashboard') }}">الصفحة الرئيسية</a>
+                        </li>
+                        <li class="breadcrumb-item ">
+                            <a href="{{ url('/' . $page='patients') }}">المرضى</a>
+                        </li>
+                        <li class="breadcrumb-item active">اضافة مريض</li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </div>
@@ -36,51 +45,40 @@
 @section('content')
 
     @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+        <div class="alert alert-success" role="alert">
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span></button>
+            <strong>Well done!</strong> {{ session('success') }}.
         </div>
     @endif
     @if (session('error'))
-        <div class="alert alert-success">
-            {{ session('error') }}
-        </div>
-    @endif
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
+        <div class="alert alert-danger mg-b-0" role="alert">
             <button aria-label="Close" class="close" data-dismiss="alert" type="button">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <strong>خطا</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+                <span aria-hidden="true">&times;</span></button>
+            <strong>Oh snap!</strong> {{ session('error') }}.
         </div>
     @endif
 
     <div class="card">
         <div class="card-body">
-            <div class="col-lg-12 margin-tb">
-                <div class="pull-right">
-                    <a class="btn btn-primary btn-sm" href="{{ route('doctors.index') }}">رجوع</a>
-                </div>
-            </div><br>
-
-            <form action="{{ route('doctors.store') }}" method="post" enctype="multipart/form-data">
+            <form id="" action="{{ route('patients.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
-                <strong>معلومات تسجيل الدخول </strong>
+                <div style="background-color: #d1ecf1;
+    width: 100%;
+    padding: 10px;
+    font-weight: bold;">معلومات تسجيل الدخول </div>
                <div style="margin-bottom: 23px;"></div>
 
                 <div class="row mg-b-20">
                     <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.input label="ايميل : " type="email" requiredInput="*" class="required" name="email" />
+                        <x-forms.label id=""><strong class="">ايميل : </strong></x-forms.label>
+                        <x-forms.input id="email" type="email" requiredInput="*" class="required" name="email" />
                     </div>
 
                     <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.label id=""><span class="">حالة ضمن النظام : </span></x-forms.label>
-                        <select name="Status" id="select-beast"
+                        <x-forms.label id=""><strong class="">حالة ضمن النظام : </strong></x-forms.label>
+                        <select name="Status" id="select-beast Status"
                                 class="form-control  nice-select  custom-select">
                             <option value="مفعل">مفعل</option>
                             <option value="غير مفعل">غير مفعل</option>
@@ -90,112 +88,174 @@
 
                 <div class="row mg-b-20">
                     <div class="parsley-input col-md-6" id="fnWrapper">
-                        <x-forms.input label="كلمة المرور: " requiredInput="*" class="required" name="password"  />
+                        <div class="row mg-b-20">
+                            <div class="parsley-input col-md-6" id="fnWrapper">
+                                <x-forms.label id=""><strong class="">كلمة المرور : </strong></x-forms.label>
+                                <x-forms.input id="password" requiredInput="*" class="required" name="password"  />
+                            </div>
+
+                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                                <x-forms.label id=""><strong class="">تاكيد كلمة المرور : </strong></x-forms.label>
+                                <x-forms.input  requiredInput="*" class="required" name="confirm-password" />
+                            </div>
+                        </div>
                     </div>
 
                     <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.input label="تاكيد كلمة المرور: " requiredInput="*" class="required" name="confirm-password" />
+                        <x-forms.label id=""><strong class="">نوع المستخدم</strong></x-forms.label>
+                        <select id="roles" name="roles[]" multiple class="form-control select2">
+                            @foreach ($roles as $key => $value)
+                                <option value="{{ $value->id }}"/>{{ $value->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div style="background-color: #d1ecf1;
+    width: 100%;
+    padding: 10px;
+    font-weight: bold;">معلومات الطبيب </div>
+                <div style="margin-bottom: 23px;"></div>
+
+
+                <div class="row mg-b-20">
+                    <div class="parsley-input col-md-6" id="fnWrapper">
+                        <x-forms.label id=""><strong class="">اسم المريض : </strong></x-forms.label>
+                        <x-forms.input id="f_name" requiredInput="*" class="required" name="f_name"/>
+                    </div>
+
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <x-forms.label id=""><strong class="">تاريخ الولادة : </strong></x-forms.label>
+                        <div class="input-group-prepend">
+                            <input id="birth_date" class="form-control" name="birth_date" placeholder="MM/DD/YYYY" type="date">
+                        </div>
+
                     </div>
                 </div>
 
                 <div class="row mg-b-20">
-                    <div class="parsley-input col-md-6" id="fnWrapper">
-                        <x-forms.label id=""><span class="">نوع المستخدم</span></x-forms.label>
-                        <select name="roles[]" multiple class="form-control select2">
-                            @foreach ($roles as $key => $value)
-                                <option value="{{ $key }}"/>{{ $value }}</option>
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <div class="row mg-b-20">
+                            <div class="parsley-input col-md-6" id="fnWrapper">
+                                <x-forms.label id=""><strong class="">اسم الاب : </strong></x-forms.label>
+                                <x-forms.input requiredInput="*" class="required" name="ft_name"/>
+                            </div>
+                            <div class="parsley-input col-md-6" id="fnWrapper">
+                                <x-forms.label id=""><strong class="">اسم الام : </strong></x-forms.label>
+                                <x-forms.input requiredInput="*" class="required" name="mother_name"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <div class="row mg-b-20">
+                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                                <x-forms.label id=""><strong class="">الحالة الاجتماعية : </strong></x-forms.label>
+                                <select id="marital_status" name="marital_status" class="form-control select2">
+                                    <option value="">chose one</option>
+                                    <option value="1">متزوج</option>
+                                    <option value="2">اعزب</option>
+                                    <option value="3">مطلق</option>
+                                    <option value="4">ارمل</option>
+                                </select>
+                            </div>
+                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                                <x-forms.label id=""><strong class="">نوع : </strong></x-forms.label>
+                                <select name="title" class="form-control select2">
+                                    <option value="">chose one</option>
+                                    <option value="1">سيد</option>
+                                    <option value="2">سيدة</option>
+                                    <option value="3">انسة</option>
+                                    <option value="4">دكتور</option>
+                                    <option value="5">طفل</option>
+                                    <option value="6">طفلة</option>
+                                    <option value="7">شاب</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mg-b-20">
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <div class="row mg-b-20">
+                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                                <x-forms.label id=""><strong class="">رقم الموبايل : </strong></x-forms.label>
+                                <x-forms.input  requiredInput="*" class="required" name="mobile" />
+
+                            </div>
+
+                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                                <x-forms.label id=""><strong class="">رقم الهاتف : </strong></x-forms.label>
+                                <x-forms.input requiredInput="*" class="required" name="phone" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <div class="row mg-b-20">
+                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                                <x-forms.label id=""><strong class="">الجنس : </strong></x-forms.label>
+                                <select id="sex" name="sex" class="form-control select2">
+                                    <option value="">chose one</option>
+                                    <option value="1">ذكر</option>
+                                    <option value="2">انثى</option>
+                                </select>
+                            </div>
+
+                            <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
+                                <x-forms.label id=""><strong class="">زمرة الدم: </strong></x-forms.label>
+                                <select name="blood" class="form-control select2">
+                                    <option value="">chose one</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mg-b-20">
+                    <div class="parsley-input col-md-3 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <x-forms.label id=""><strong class="">الجنسية</strong></x-forms.label>
+                        <select name="nationality" multiple class="form-control select2">
+                            @foreach ($nationality as $key => $value)
+                                <option value="{{ $value->id }}"/>{{ $value->name_ar }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="parsley-input col-md-3 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <x-forms.label id=""><strong class="">المدينة</strong></x-forms.label>
+                        <select id="city" name="p_city" multiple class="form-control select2">
+                            @foreach ($city as $key => $value)
+                                <option value="{{ $value->id }}"/>{{ $value->name }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                </div>
-
-                <strong>معلومات الطبيب </strong>
-                <div style="margin-bottom: 23px;"></div>
-
-                <x-forms.input hidden="" name="cln_m_icd10_md_id" :value="$section" />
-                <div class="row mg-b-20">
-                    <div class="parsley-input col-md-6" id="fnWrapper">
-                        <x-forms.input label="اسم الطبيب:"  requiredInput="*" class="required" name="first_name"  />
-                    </div>
-
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.input label="الكنية: " requiredInput="*" class="required" name="last_name"  />
-                    </div>
-                </div>
-
-                <div class="row mg-b-20">
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>
-                            </div>
-                        </div><input class="form-control fc-datepicker" name="birthday" placeholder="MM/DD/YYYY" type="text">
-
-                    </div>
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.input label="رقم الهاتف: " requiredInput="*" class="required" name="phone_number" />
-
-                    </div>
-                </div>
-
-                <div class="row mg-b-20">
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.label id=""><span class="">الجنس : </span></x-forms.label>
-                        <select name="gender" class="form-control select2">
-                            <option value="">chose one</option>
-                            <option value="male">ذكر</option>
-                            <option value="female">انثى</option>
+                    <div class="parsley-input col-md-3 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <x-forms.label id=""><strong class="">المنطقة</strong></x-forms.label>
+                        <select id="area" name="p_area" multiple class="form-control select2">
+                            @foreach ($area as $key => $value)
+                                <option value="{{ $value->id }}"/>{{ $value->name }}</option>
+                            @endforeach
                         </select>
                     </div>
-
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.label id=""><span class="">حالة العمل: </span></x-forms.label>
-                        <select name="status" class="form-control select2">
-                            <option value="">chose one</option>
-                            <option value="active">ضمن الدوام</option>
-                            <option value="inactive">خارج الدوام</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mg-b-20">
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.input label="سعر الجلسة: " requiredInput="*" class="required" name="price" />
-                    </div>
-
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.input label="مدة المعاينة بدقيقة: " requiredInput="*" class="required" name="slot_time" />
-
-                    </div>
-                </div>
-
-                <div class="row mg-b-20">
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.input label=" دوام من الساعة: " type="time" requiredInput="*" class="required"
-                                       name="from_time"/>
-                    </div>
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.input label="الي الساعة: " type="time" requiredInput="*" class="required"
-                                       name="to_time"/>
-                    </div>
-                </div>
-
-                <div class="row mg-b-20">
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                        <x-forms.label id=""><span class="">وصف عن الطبيب : </span></x-forms.label>
-
-                        <textarea class="form-control" name="description" style="height: 215px;" placeholder="Textarea" rows="3">Textarea</textarea>
-
-                    </div>
-
-                    <div class="parsley-input col-md-6 mg-t-20 mg-md-t-0" id="lnWrapper">
-                            <x-forms.input label="صورة الطبيب " requiredInput="*" name="photo" type="file" class="dropify" data-height="200" />
+                    <div class="parsley-input col-md-3 mg-t-20 mg-md-t-0" id="lnWrapper">
+                        <x-forms.label id=""><strong class="">العنوان</strong></x-forms.label>
+                        <x-forms.input type="text" requiredInput="" class="required" name="address" />
                     </div>
                 </div>
 
                 <div class="mg-t-30">
-                    <button class="btn btn-main-primary pd-x-20" type="submit">تحديث</button>
+                    <button id="formid" class="btn btn-info-gradient pd-x-20" type="submit">Save</button>
                 </div>
             </form>
         </div>
@@ -203,6 +263,61 @@
 
 @endsection
 @section('js')
+
+    <script>
+        $("#formid").click(function(){
+
+
+            var email = $("#email").val();
+            var f_name = $("#f_name").val();
+            var password = $("#password").val();
+            var birth_date = $("#birth_date").val();
+
+            if(email == "") {
+                alert("Please enter email.");
+                return false;
+            }
+            if($('#Status').val()) {
+                alert("Please chose Status.");
+                return false;
+            }
+            if(password == "") {
+                alert("Please enter password.");
+                return false;
+            }
+            if(!$('#roles').val()) {
+                alert("Please chose role.");
+                return false;
+            }
+            if(f_name == "") {
+                alert("Please enter name.");
+                return false;
+            }
+            if(birth_date == "") {
+                alert("Please enter birthday.");
+                return false;
+            }
+            if(!$('#marital_status').val()) {
+                alert("Please chose status.");
+                return false;
+            }
+            if(!$('#sex').val()) {
+                alert("Please chose sex.");
+                return false;
+            }
+            if(!$('#city').val()) {
+                alert("Please chose city.");
+                return false;
+            }
+            if(!$('#area').val()) {
+                alert("Please chose area.");
+                return false;
+            }
+
+                $("#formid").submit(); // Submit the form
+
+        });
+    </script>
     <!-- Internal Treeview js -->
     <script src="{{URL::asset('assets/plugins/select2/js/select2.min.js')}}"></script>
     <!-- Internal Treeview js -->

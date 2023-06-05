@@ -13,13 +13,13 @@ interface IPatientRepository
 
     public function edit(gnr_m_patients $doctor);
 
-    public function update(Request $request, gnr_m_patients $doctors);
+    public function update(Request $request, string $doctors);
 
     public function create();
 
     public function store(Request $request);
 
-    public function destroy($doctors);
+    public function destroy(Request $request);
 
     public function cities();
 

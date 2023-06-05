@@ -18,10 +18,10 @@
     top:0;
     bottom:0;
     right:0;
-    border-right:1px solid #e3e3e3;	
+    border-right:1px solid #e3e3e3;
 }
 .tree li {
-    margin:0;    
+    margin:0;
     line-height:2em;
     color:#56546d;
     position:relative
@@ -33,7 +33,7 @@
     margin-left: 5px;
     font-weight: bold;
 	color: #0162e8;
-	float: right;	
+	float: right;
     margin-top: 8px;
 }
 .tree ul li:before {
@@ -45,13 +45,13 @@
     margin-top:-1px;
     position:absolute;
     top:1em;
-    right:0;	
+    right:0;
 }
 .tree ul li:last-child:before {
     background:#fff;
     height:auto;
     top:1em;
-    bottom:0;	
+    bottom:0;
 }
 .indicator {
     margin-right:5px;
@@ -70,3 +70,22 @@
     padding:0px 0px 0px 0px;
     outline: 0;
 }
+
+.short {
+    visibility: hidden;
+    height: 0;
+}
+
+.tall {
+   visibility: visible;
+}
+input[type="text"]:disabled{background-color:#f9f9f9;}
+#icd10display{
+    overflow: auto;
+    height: 200px;
+}
+#icd10display .btn{
+    width: 100%;
+}
+
+

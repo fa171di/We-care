@@ -531,7 +531,7 @@
 						<div class="card text-center">
 							<img class="card-img-top w-100" src="{{URL::asset('assets/img/photos/7.jpg')}}" alt="">
 							<div class="card-body">
-								<h4 class="card-title mb-3">Card Title</h4>
+								<h4 class="card-title mb-3">Card fhgfhgfthgf</h4>
 								<p class="card-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</p>
 								<a class="btn btn-primary" href="#">Read More</a>
 							</div>

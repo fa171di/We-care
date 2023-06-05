@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class cln_x_visits extends Model
 {
     use HasFactory;
-    protected $fillable = ['patient ', 'clinic', 'type','d_start ','note'];
+    protected $fillable = ['patient ', 'clinic', 'type','d_start ','note','price'];
     protected $table = 'cln_x_visits';
 
 

@@ -40,8 +40,8 @@ class PatientRepository implements IPatientRepository
         if ($mobile = $request->query('mobile')) {
             $query->where('mobile', '=', $mobile);
         }
-        $query->where('id', '=', 2120353);
-
+        //$query->where('id', '=', 2120353);
+                  $query->orderBy('id','desc');
         return $query->paginate(10);
     }
 
@@ -52,39 +52,47 @@ class PatientRepository implements IPatientRepository
 
     public function edit(gnr_m_patients $doctor)
     {
-      /*  $doc = $this->doctor::with('user')->get();
-        $user =  User::all();
-       return [$doc,$user];*/
+
     }
 
-    public function update(Request $request, gnr_m_patients $doctors)
+    public function update(Request $request, string $patient)
     {
-        //dd($doctor);
-        /*try {
-            DB::transaction(function () use ($request) {
-                $doctor = doctors::findOrFail($request->doctor_id);
-                $new_image = $this->ReplaceImg($doctor,$request,'photo','doctors');
-                return $doctor->update([
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'to_time'=> $request->to_time,
-                    'slot_time'=> $request->slot_time,
-                    'price'=> $request->price,
-                    'from_time'=> $request->from_time,
-                    'user_id'=> $request->user_id,
-                    'birthday'=> date('Y-m-d H:i:s', strtotime($request->birthday)),
-                    'description'=> $request->description,
-                    'cln_m_icd10_md_id'=> $request->cln_m_icd10_md_id,
-                    'phone_number'=> $request->phone_number,
-                    'gender'=> $request->gender,
-                    'status'=> $request->status,
-                    'photo'=> $new_image,
+        try {
+            DB::transaction(function () use ($request,$patient) {
+                $user = User::find($request->id);
+                $user->update([
+                    'name' => $request->f_name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request['password']),
+                    'Status'=> $request->Status,
                 ]);
+
+                $user->syncRoles($request->roles);
+                DB::table('gnr_m_patients')->where('id', $patient)
+                    ->update([
+                        'f_name' => $request->f_name,
+                        'birth_date' => $request->birth_date,
+                        'ft_name' => $request->ft_name,
+                        'mother_name' => $request->mother_name,
+                        'marital_status' => $request->marital_status,
+                        'title' => $request->title,
+                        'mobile' => $request->mobile,
+                        'phone' => $request->phone,
+                        'sex' => $request->sex,
+                        'blood' => $request->blood,
+                        'nationality' => $request->nationality,
+                        'p_city' => $request->p_city,
+                        'p_area' => $request->p_area,
+                        'address' => $request->address,
+                    ]);
+
             });
             DB::commit();
         } catch (\Exception $ex) {
             DB::rollback();
-        }*/
+            return $ex;
+
+        }
 
     }
 
@@ -95,57 +103,51 @@ class PatientRepository implements IPatientRepository
 
     public function store(Request $request)
     {
-       /* $new_image = "";
         try {
-            DB::transaction(function () use ($request,$new_image) {
+            DB::transaction(function () use ($request) {
                 $user = User::create([
-                    'name' => $request->first_name .' '.$request->last_name,
+                    'name' => $request->f_name,
                     'email' => $request->email,
                     'password' => Hash::make($request['password']),
                     'Status'=> $request->Status,
                 ]);
                 $user->assignRole($request->roles);
-                if ($request->hasFile('photo')) {
-                    $new_image = $this->UploadFile($request, 'photo', 'doctors');
-                }
-                $doctor = doctors::create([
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'to_time'=> $request->to_time,
-                    'slot_time'=> $request->slot_time,
-                    'price'=> $request->price,
-                    'from_time'=> $request->from_time,
-                    'user_id'=> $user->id,
-                    'birthday'=> date('Y-m-d H:i:s', strtotime($request->birthday)),
-                    'description'=> $request->description,
-                    'cln_m_icd10_md_id'=> $request->cln_m_icd10_md_id,
-                    'phone_number'=> $request->phone_number,
-                    'gender'=> $request->gender,
-                    'status'=> $request->status,
-                    'photo'=> $new_image,
-                ]);
+
+                $pateint = DB::insert('insert into gnr_m_patients (f_name, birth_date,ft_name,mother_name,marital_status,
+                            title,mobile,phone,sex,blood,nationality,p_city,p_area,address,user_id)
+                values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [
+                    $request->f_name, $request->birth_date, $request->ft_name, $request->mother_name
+                    ,  $request->marital_status,$request->title,$request->mobile,
+                    $request->phone,$request->sex,$request->blood,
+                    $request->nationality,$request->p_city,
+                    $request->p_area,$request->address,$user->id]);
+
+
             });
             DB::commit();
         } catch (\Exception $ex) {
             DB::rollback();
-        }*/
+            return $ex;
+
+        }
     }
 
-    public function destroy($doctors)
+    public function destroy(Request $request)
     {
-       /* try {
-            DB::transaction(function () use ($doctors) {
-                $doctor = doctors::findOrFail($doctors);
-                if ($doctor->photo !== ""){
-                    unlink(public_path('img/'.$doctor->photo));
+        try {
+            DB::transaction(function () use ($request) {
+                $user = gnr_m_patients::find($request->input);
+                if ($user->cln_m_medical_his->isEmpty()) {
+                    DB::table('gnr_m_patients')->where('id', '=', $request->input)->delete();
+                    DB::table('users')->where('id', '=', $user->user_id)->delete();
                 }
-                doctors::find($doctors)->delete();
-                User::find($doctor->user_id)->delete();
             });
             DB::commit();
+            return ['result' =>"تم الحذف بنجاح",'data' => ""];
         } catch (\Exception $ex) {
             DB::rollback();
-        }*/
+            return ['result' =>"يوجد خطأ ما",'data' => $ex];
+        }
     }
 
     public function cities(){

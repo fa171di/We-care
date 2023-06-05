@@ -160,3 +160,13 @@
     right: 10px !important;
     left: 10px !important;
 }
+
+
+#history .tabs-style-3 .nav.panel-tabs li a.active {
+    background: #22c03c;
+    color: #fff;
+}
+
+#history .tabs-style-3 .nav.panel-tabs li a {
+    background: #ecfaec;
+}

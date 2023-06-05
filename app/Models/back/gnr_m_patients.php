@@ -102,7 +102,9 @@ class gnr_m_patients extends Model
     }
     public function age()
     {
-        return Carbon::parse($this->attributes['birth_date'])->age;
+        return \Carbon\Carbon::parse($this->attributes['birth_date'])->diff(\Carbon\Carbon::now())->format('%y سنة و %m اشهر');
+
+         //Carbon::parse($this->attributes['birth_date'])->age;
     }
 
 }

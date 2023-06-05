@@ -11,7 +11,7 @@ class gnr_m_patients_medical_info extends Model
 {
     use HasFactory;
     protected $fillable = ['patient ', 'birth_date', 'sex',
-        'father_height','mother_height'];
+       'height', 'father_height','mother_height'];
     protected $table = 'gnr_m_patients_medical_info';
 
     public function gnr_m_patients(): BelongsTo
