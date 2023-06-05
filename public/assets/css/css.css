@@ -1,0 +1,81 @@
+@charset "UTF-8";
+.love{
+    transform-style: preserve-3d;
+    transition: 2s ease-in-out all;
+    height: 265px;
+    margin-bottom: 64px;
+
+}
+.love .divClass{
+    background-color: #0ba360;
+    z-index :1;
+    position: absolute;
+    left:9px;
+    width:255px;
+    height: 271px;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+.love .love1{
+    z-index :2;
+    position: absolute;
+    backface-visibility: hidden;
+}
+/*
+.hoverIcon:hover ~ .love{
+    transform: rotateY(180deg);
+
+ }*/
+.love:has(a:hover){
+    transform: rotateY(180deg);
+}
+
+/*
+.love {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+}
+
+.lol:focus {
+    outline: 0;
+}
+
+.love1:hover .divClass,
+.love1:focus .divClass{
+    transform: rotateY(180deg);
+}
+
+.divClass,
+.love1 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.love1 {
+    background: linear-gradient(to left, #4364f7, #6fb1fc);
+    color: black;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divClass {
+    background: linear-gradient(to right, #4364f7, #6fb1fc);
+    color: white;
+    transform: rotateY(180deg);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+*/

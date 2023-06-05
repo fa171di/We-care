@@ -21,6 +21,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(IPatientRepository::class,PatientRepository::class);
         $this->app->bind(IClinicRepository::class,ClinicsRepository::class);
 
+
+
     }
 
     /**
