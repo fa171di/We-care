@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 trait ResponseTrait
 {
-    public function returnError($errNum,$msg){
+    public function returnError($errNum, $msg)
+    {
         return response()->json([
             'success' => false,
             'error' => $errNum,
@@ -14,7 +15,8 @@ trait ResponseTrait
         ]);
     }
 
-    public function returnSuccess($errNum="",$msg=""){
+    public function returnSuccess($errNum = "", $msg = "")
+    {
         return response()->json([
             'success' => true,
             'error' => $errNum,
@@ -22,7 +24,8 @@ trait ResponseTrait
         ]);
     }
 
-    public function returnData($key,$value,$msg="",$errNum="S00"){
+    public function returnData($key, $value, $msg = "", $errNum = "S00")
+    {
         return response()->json([
             'success' => true,
             'error' => $errNum,

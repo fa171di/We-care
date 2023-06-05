@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\Hash;
 class ClinicsRepository implements IClinicRepository
 {
     use UploadFileTrait;
+
     public $clinics;
 
     public function __construct(gnr_m_clinics $clinic)
     {
         $this->clinics = $clinic;
     }
+
     public function index()
     {
         return $departments = gnr_m_clinics::all();

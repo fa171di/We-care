@@ -14,11 +14,12 @@ use App\Repositories\Clinics\IClinicRepository;
 class ApiPatientController extends Controller
 {
     use ResponseTrait;
+
     public IClinicRepository $ClinicRepository;
     private IDoctorRepository $DoctorRepository;
 
 
-    public function __construct(IClinicRepository $clinic,IDoctorRepository $DoctorRepository,IPatientRepository $patientRepository)
+    public function __construct(IClinicRepository $clinic, IDoctorRepository $DoctorRepository, IPatientRepository $patientRepository)
     {
         $this->ClinicRepository = $clinic;
         $this->DoctorRepository = $DoctorRepository;
@@ -26,42 +27,46 @@ class ApiPatientController extends Controller
 
     }
 
-    public function departments():JsonResponse{
+    public function departments(): JsonResponse
+    {
 
         $departments = $this->ClinicRepository->index();
-        if (!$departments){
+        if (!$departments) {
             return $this->returnSuccess("There are no departments..");
-        }else
-        return $this->returnData("departments",$departments);
+        } else
+            return $this->returnData("departments", $departments);
 
     }
 
-    public function cities():JsonResponse{
+    public function cities(): JsonResponse
+    {
 
         $cities = $this->PatientRepository->cities();
-        if (!$cities){
-            return $this->returnError("D01","There are no cities..");
-        }else
-            return $this->returnData("cities",$cities,"","D00");
+        if (!$cities) {
+            return $this->returnError("D01", "There are no cities..");
+        } else
+            return $this->returnData("cities", $cities, "", "D00");
     }
 
-    public function areas(Request $request):JsonResponse{
+    public function areas(Request $request): JsonResponse
+    {
         $citie = $request->citie;
         $areas = $this->PatientRepository->areas($citie);
-        if ($areas->count()==0){
-            return $this->returnError("D01","There are no areas..");
-        }else{
-            return $this->returnData("areas",$areas,"","D00");
+        if ($areas->count() == 0) {
+            return $this->returnError("D01", "There are no areas..");
+        } else {
+            return $this->returnData("areas", $areas, "", "D00");
         }
     }
 
-    public function famous_doctors():JsonResponse{
+    public function famous_doctors(): JsonResponse
+    {
 
         $famous_doctors = $this->DoctorRepository->getFamousDoctors();
-        if ($famous_doctors->count()==0){
-            return $this->returnSuccess("D01","There are no Famous Doctors..");
-        }else
-            return $this->returnData("famous doctors",$famous_doctors,"","D00");
+        if ($famous_doctors->count() == 0) {
+            return $this->returnSuccess("D01", "There are no Famous Doctors..");
+        } else
+            return $this->returnData("famous doctors", $famous_doctors, "", "D00");
 
     }
 

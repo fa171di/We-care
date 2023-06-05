@@ -62,9 +62,9 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('doctors', DoctorsController::class);
     Route::resource('patients', Gnr_m_patientsController::class);
     Route::resource('visits', Cln_x_visitsController::class);
-   // Route::get('visits/MyVisits',  [Cln_x_visitsController::class, 'getVisitForDoctor']);
+    // Route::get('visits/MyVisits',  [Cln_x_visitsController::class, 'getVisitForDoctor']);
 
-   // Route::get('/services/{id}/{clinic}/edit', [Cln_m_servicesController::class])->name("services.edit");
+    // Route::get('/services/{id}/{clinic}/edit', [Cln_m_servicesController::class])->name("services.edit");
     Route::resource('services', Cln_m_servicesController::class);
     Route::resource('medical', Cln_m_medical_hisController::class);
     Route::resource('com', Cln_x_prev_comController::class);
@@ -77,10 +77,10 @@ Route::middleware('auth')->group(callback: function () {
 
 
     //zRoute::get('/user/{id}', [UserController::class, 'show']);
-    Route::get('/MedicalFile/create/{visit}/{clinic}/{patient}', [Medical_fileController::class])->name("MedicalFile.create");;
-    Route::resource('MedicalFile', Medical_fileController::class );
+    //Route::get('/MedicalFile/create/{visit}/{clinic}/{patient}', [Medical_fileController::class])->name("MedicalFile.create");;
+    Route::resource('MedicalFile', Medical_fileController::class);
 
     Route::get('/{page}', [AdminController::class, 'index']);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
