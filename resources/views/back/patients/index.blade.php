@@ -82,6 +82,7 @@
                             <th class="wd-lg-8p"><span>المنطقة</span></th>
                             <th class="wd-lg-8p"><span>القومية</span></th>
                             <th class="wd-lg-8p"><span>العنوان</span></th>
+                            <th class="wd-lg-8p"><span>حساب محفظتي</span></th>
                             <th class="wd-lg-8p"><span>الايميل</span></th>
                             <th class="wd-lg-8p"><span>العمليات</span></th>
                         </tr>
@@ -103,10 +104,14 @@
                                 <td>{{$value->gnr_m_areas->name ?? '----'}}</td>
                                 <td>{{$value->gnr_m_nationality->name_ar?? '----'}}</td>
                                 <td>{{$value->address}}</td>
+                                <td>{{$value->digital_wallet}}</td>
                                 <td>{{$value->user->email}}</td>
                                 <td>
+                                    <a href="{{ route('wallet.edit', $value->id) }}" class="btn btn-sm btn-indigo"
+                                       title="عمليات الحساب"><i class="las la-wallet"></i></a>
+
                                     <a href="{{ route('patients.edit', $value->id) }}" class="btn btn-sm btn-info"
-                                           title="تعديل"><i class="las la-pen"></i></a>
+                                           title="تعديل المريض"><i class="las la-pen"></i></a>
 
                                     <a href="{{ route('visits.show', $value->id) }}" class="btn btn-sm btn-success"
                                        title="اظهار جميع الزيارات"><i class="las la-pen"></i></a>
