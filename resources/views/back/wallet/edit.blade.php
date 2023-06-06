@@ -112,7 +112,7 @@
                             <tbody id="">
                             @foreach ($patient[0]->wallet as $pat)
                                 <tr>
-                                    <td class="text-center text-lg text-medium">{{ $pat->created_at }}</td>
+                                    <td class="text-center text-lg text-medium">{{ $pat->time() }}</td>
                                     @if($pat->statue == 0)
                                         <td class="text-center text-lg text-medium" style="color: limegreen">{{ $pat->Statue() }}</td>
                                     @else

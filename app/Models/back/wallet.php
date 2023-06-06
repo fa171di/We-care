@@ -28,4 +28,8 @@ class wallet extends Model
         return $this->statue == '0' ? 'اضاف' : 'سحب';
 
     }
+
+    public function time(){
+        return Carbon::parse($this->attributes['created_at'])->format('Y-m-d الساعة: h:i A');
+    }
 }
