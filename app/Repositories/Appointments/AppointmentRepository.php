@@ -3,6 +3,7 @@
 namespace App\Repositories\Appointments;
 
 use App\Models\back\Appointment;
+use App\Models\back\DoctorAvailableDay;
 use App\Models\back\DoctorAvailableSlot;
 use App\Models\back\doctors;
 use App\Models\User;
@@ -16,6 +17,7 @@ class AppointmentRepository implements IAppointmentRepository
 {
     use UploadFileTrait;
     use ResponseTrait;
+
     public $appointment;
 
     public function __construct(Appointment $appointment)
@@ -23,46 +25,50 @@ class AppointmentRepository implements IAppointmentRepository
         $this->Appointment = $appointment;
     }
 
-    public function pat_appoints(){
+    public function pat_appoints()
+    {
         $user = auth()->user();
         $user_id = $user->id;
         $today = Carbon::today()->format('Y-m-d');
-        return Appointment::with('doctor','timeSlot')
+        return Appointment::with('doctor', 'timeSlot')
             ->where('appointment_for', $user_id)
-            ->whereDate('appointment_date', '>',$today)
+            ->whereDate('appointment_date', '>', $today)
             ->where('status', 0)->get();
     }
 
-    public function doc_appoints(){
+    public function doc_appoints()
+    {
         $user = auth()->user();
         $user_id = $user->id;
         $today = Carbon::today()->format('Y/m/d');
-        $doctor = doctors::where('user_id',$user_id)->first();
+        $doctor = doctors::where('user_id', $user_id)->first();
         $doc_id = $doctor->id;
-        return Appointment::with('patient','timeSlot')
+        return Appointment::with('patient', 'timeSlot')
             ->where('appointment_with', $doc_id)
             ->whereDate('appointment_date', '>', $today)
             ->where('status', 0)
             ->orderBy('id', 'DESC')->get();
     }
 
-    public function doc_today_appoints(){
+    public function doc_today_appoints()
+    {
         $user = auth()->user();
         $user_id = $user->id;
         $today = Carbon::today()->format('Y/m/d');
-        $doctor = doctors::where('user_id',$user_id)->first();
+        $doctor = doctors::where('user_id', $user_id)->first();
         $doc_id = $doctor->id;
-        return Appointment::with('patient','timeSlot')
+        return Appointment::with('patient', 'timeSlot')
             ->where('appointment_with', $doc_id)
             ->whereDate('appointment_date', '=', $today)
             ->where('status', 0)
             ->orderBy('id', 'DESC')->get();
     }
 
-    public function pat_canceled_appoints(){
+    public function pat_canceled_appoints()
+    {
         $user = auth()->user();
         $user_id = $user->id;
-        return Appointment::with('doctor','timeSlot')
+        return Appointment::with('doctor', 'timeSlot')
             ->where('appointment_for', $user_id)
             ->where('status', 2)
             ->orderBy('id', 'DESC')->get();
@@ -70,22 +76,25 @@ class AppointmentRepository implements IAppointmentRepository
 
     public function show($appointment)
     {
-        return $this->Appointment::with('patient','doctor');
+        return $this->Appointment::with('patient', 'doctor');
     }
 
-    public function doctor_available_days($doc){
-        $doctor =doctors::with('available_days')->find($doc);
-        return $doctor->available_days;
+    public function doctor_available_days($doc)
+    {
+        $doctor = doctors::with('available_days')->find($doc);
+        $days = DoctorAvailableDay::where('doctor_id', $doctor->id)->first();
+        return $days;
     }
 
-    public function slots($doc,$dates){
+    public function slots($doc, $dates)
+    {
 
         $appointment_slot = DoctorAvailableSlot::with(['appointment' => function ($re) use ($dates) {
             $re->where('appointment_date', $dates);
         }])->where('doctor_id', $doc)->get();
-        $slots[]=null;
-        $i=0;
-        foreach ($appointment_slot as $slot){
+        $slots[] = null;
+        $i = 0;
+        foreach ($appointment_slot as $slot) {
             if ($slot->appointment->count() == 0) {
                 $slots[$i] = $slot;
                 $i++;
@@ -99,12 +108,12 @@ class AppointmentRepository implements IAppointmentRepository
         $date = $input['appointment_date'];
         $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
         try {
-            DB::transaction(function () use ($input,$appointment,$newDate) {
+            DB::transaction(function () use ($input, $appointment, $newDate) {
                 $appoint = Appointment::findOrFail($appointment)->get();
-                $appoint->appointment_for =$input['appointment_for'];
-                $appoint->appointment_with =$input['appointment_with'];
+                $appoint->appointment_for = $input['appointment_for'];
+                $appoint->appointment_with = $input['appointment_with'];
                 $appoint->appointment_date = $newDate;
-                $appoint->slot_time=$input['slot_time'];
+                $appoint->slot_time = $input['slot_time'];
                 $appoint->save();
             });
             DB::commit();
@@ -116,35 +125,45 @@ class AppointmentRepository implements IAppointmentRepository
 
     public function store($input)
     {
-        $date = $input['appointment_date'];
-        $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
+        $user = auth()->user();
         try {
-            DB::transaction(function () use ($input,$newDate) {
-                Appointment::create([
-                    'appointment_for' =>$input['appointment_for'],
-                    'appointment_with' => $input['appointment_with'],
+            $date = $input['appointment_date'];
+            $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
+            $id_doc = $input['appointment_with'];
+            if ($user->roles_name == 'Patient') {
+                $doctor = doctors::find($id_doc);
+                $apointment = Appointment::create([
+                    'appointment_for' => $user->id,
+                    'appointment_with' => $doctor->user_id,
                     'appointment_date' => $newDate,
                     'available_slot' => $input['available_slot'],
                 ]);
-            });
-            DB::commit();
+            } elseif ($user->roles_name == 'Doctor') {
+                $apointment = Appointment::create([
+                    'appointment_for' => $input['appointment_for'],
+                    'appointment_with' => $user->id,
+                    'appointment_date' => $newDate,
+                    'available_slot' => $input['available_slot'],
+                ]);
+            }
+            return $apointment;
         } catch (\Exception $ex) {
-            DB::rollback();
+            return $ex;
         }
     }
 
     public function destroy($appointment)
     {
         $appoint = Appointment::find($appointment->id);
-        $appoint->is_deleted=1;
+        $appoint->is_deleted = 1;
         $appoint->save();
     }
 
     public function cancel_appoint($appointment)
     {
-            $appoint = Appointment::find($appointment);
-            $appoint->status=1;
-            $appoint->save();
-            return $appoint;
+        $appoint = Appointment::find($appointment);
+        $appoint->status = 1;
+        $appoint->save();
+        return $appoint;
     }
 }

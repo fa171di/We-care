@@ -39,7 +39,7 @@ class Medical_fileController extends Controller
         //relation
         $cln_m_medical_his_cats = cln_m_medical_his_cats::all();
         $patientinfo = gnr_m_patients::find($patient);
-        $patientM =  $patientinfo->cln_m_medical_his;
+        $patientM = $patientinfo->cln_m_medical_his;
         $patientInfoExiste = $patientinfo->gnr_m_patients_medical_info;
 
 
@@ -66,11 +66,11 @@ class Medical_fileController extends Controller
         $icd10_21 = cln_m_icd10::where('cat','=','21')->get();
         $icd10_22 = cln_m_icd10::where('cat','=','22')->get();*/
 
-        $services = cln_m_services::where('clinic','=',$clinic)->get();
-        $medicalH =  cln_m_medical_his::select('id','cat','name_ar')->get();
+        $services = cln_m_services::where('clinic', '=', $clinic)->get();
+        $medicalH = cln_m_medical_his::select('id', 'cat', 'name_ar')->get();
         return view('back.services.create', compact(
-            'cln_m_medical_his_cats','patientInfoExiste','patientinfo','patientM'
-            ,'visit','patient','clinic','services','medicalH'));
+            'cln_m_medical_his_cats', 'patientInfoExiste', 'patientinfo', 'patientM'
+            , 'visit', 'patient', 'clinic', 'services', 'medicalH'));
     }
 
     /**

@@ -81,10 +81,10 @@ Route::middleware('auth')->group(callback: function () {
 
 
     //zRoute::get('/user/{id}', [UserController::class, 'show']);
-    Route::get('/MedicalFile/create/{visit}/{clinic}/{patient}', [Medical_fileController::class])->name("MedicalFile.create");;
-    Route::resource('MedicalFile', Medical_fileController::class );
+    //Route::get('/MedicalFile/create/{visit}/{clinic}/{patient}', [Medical_fileController::class])->name("MedicalFile.create");;
+    Route::resource('MedicalFile', Medical_fileController::class);
 
     Route::get('/{page}', [AdminController::class, 'index']);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

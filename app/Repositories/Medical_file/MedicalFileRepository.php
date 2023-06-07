@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 class MedicalFileRepository implements IMedicalFileRepository
 {
     use UploadFileTrait;
+
     public $file;
     public $user;
 
@@ -21,6 +22,7 @@ class MedicalFileRepository implements IMedicalFileRepository
     {
         $this->user = $user;
     }
+
     public function index()
     {
 
@@ -158,7 +160,6 @@ insert into cln_x_medical_his (cat ,med_id,patient,note)
             DB::rollback();
             return redirect()->back()->with(['error' => $ex]);
         }
-
 
 
     }
