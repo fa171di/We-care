@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Back\AdsController;
 use App\Http\Controllers\Back\Cln_m_medical_hisController;
 use App\Http\Controllers\Back\Cln_m_servicesController;
 use App\Http\Controllers\Back\Cln_x_prev_clnController;
@@ -76,6 +77,7 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('patients_info', Gnr_m_patientsInfoController::class);
     Route::resource('report', ReportsController::class);
     Route::resource('wallet', WalletController::class);
+    Route::resource('ads', AdsController::class);
 
 
     //zRoute::get('/user/{id}', [UserController::class, 'show']);

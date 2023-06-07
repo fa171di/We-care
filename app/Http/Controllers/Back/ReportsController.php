@@ -21,18 +21,27 @@ class ReportsController extends Controller
     public function store(Request $request){
         try {
             $data1 =  $request->area;
+            $client = new Client();
+            $responses = $client->request('GET','http://127.0.0.1:8000/data/'.$data1);
+            $diseases = json_decode($responses->getBody(),true);
+            dd($diseases) ;
 
-            $response = Http::post('http://localhost:8888/notebooks/Documents/python/python_corrected_v2.ipynb/api/area',[
-                'data'=> $data1,
+        } catch (\Exception $ex) {
+
+            return ['result' =>"يوجد خطأ ما",'data' => $ex];
+        }
+    }
+    public function update(Request $request,string $id){
+        try {
+            $client = new Client();
+            $diseases = $request->input('disease');
+            $responses = $client->request('POST', 'http://127.0.0.1:8000/data/', [
+                'form_params' => [
+                    'disease' => $diseases
+                ]
             ]);
-            if($response->ok()){
-                $date =  json_decode($response->getBody(),true);
-                dd($date);
-            }else{
-                dd('false');
-            }
-
-
+            $areas = json_decode($responses->getBody(), true);
+            dd($areas);
 
         } catch (\Exception $ex) {
 

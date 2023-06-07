@@ -73,7 +73,7 @@ class gnr_m_patients extends Model
     }
 
     public function wallet(){
-        return $this->hasMany(wallet::class, 'patient_id','id')->orderBy('id','desc');
+        return $this->hasMany(Ads::class, 'patient_id','id')->orderBy('id','desc');
     }
     public function getSex()
     {

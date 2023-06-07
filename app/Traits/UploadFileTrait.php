@@ -15,11 +15,11 @@ trait UploadFileTrait
 
     public function ReplaceImg($objectModel,$request,$FieldName,$folderName){
         $new_image = '';
-        $old_image = $objectModel->photo;
+        $old_image = $objectModel;
+        if($old_image){
+            unlink(public_path('img/'.$old_image));
+        }
         if ($request->hasFile($FieldName)){
-            if($old_image){
-                unlink(public_path('img/'.$old_image));
-            }
             $new_image = $this->UploadFile($request,$FieldName,$folderName);
         }
         return $new_image;

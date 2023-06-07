@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Ads\AdsRepository;
+use App\Repositories\Ads\IAdsRepository;
 use App\Repositories\Appointments\AppointmentRepository;
 use App\Repositories\Appointments\IAppointmentRepository;
 use App\Repositories\Clinics\ClinicsRepository;
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(IMedicalFileRepository::class,MedicalFileRepository::class);
         $this->app->bind(IWalletRepository::class,WalletRepository::class);
         $this->app->bind(IAppointmentRepository::class,AppointmentRepository::class);
+        $this->app->bind(IAdsRepository::class,AdsRepository::class);
 
 
 

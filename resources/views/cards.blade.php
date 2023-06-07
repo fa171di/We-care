@@ -331,7 +331,7 @@
 							<div class="card-img-overlay pd-30 bg-black-4 d-flex flex-column justify-content-center">
 								<p class="tx-white tx-medium mg-b-15">The Ghost Town</p>
 								<p class="tx-white-7 tx-13">Some quick example text to build on the card title and make up the bulk of the card's content. Lorem ipsum dolor sit amet consictetur...</p>
-								<p class="tx-13 mg-b-0"><a class="tx-white" href="">Read more</a></p>
+								<p class="tx-13 mg-b-0"><a class="tx-white" href="">Read ss more</a></p>
 							</div><!-- card-img-overlay -->
 						</div>
 					</div>
