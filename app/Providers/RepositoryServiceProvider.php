@@ -14,6 +14,8 @@ use App\Repositories\Patients\IPatientRepository;
 use App\Repositories\Patients\PatientRepository;
 use App\Repositories\Serveices\IServiceRepository;
 use App\Repositories\Serveices\ServiceRepository;
+use App\Repositories\Wallet\IWalletRepository;
+use App\Repositories\Wallet\WalletRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -28,7 +30,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(IClinicRepository::class,ClinicsRepository::class);
         $this->app->bind(IServiceRepository::class,ServiceRepository::class);
         $this->app->bind(IMedicalFileRepository::class,MedicalFileRepository::class);
+        $this->app->bind(IWalletRepository::class,WalletRepository::class);
         $this->app->bind(IAppointmentRepository::class,AppointmentRepository::class);
+
+
+
     }
 
     /**

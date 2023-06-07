@@ -18,6 +18,7 @@ use App\Http\Controllers\Back\Medical_fileController;
 use App\Http\Controllers\Back\ReportsController;
 use App\Http\Controllers\Back\RoleController;
 use App\Http\Controllers\Back\UserController;
+use App\Http\Controllers\Back\WalletController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -74,6 +75,7 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('note', Cln_x_prev_noteController::class);
     Route::resource('patients_info', Gnr_m_patientsInfoController::class);
     Route::resource('report', ReportsController::class);
+    Route::resource('wallet', WalletController::class);
 
 
     //zRoute::get('/user/{id}', [UserController::class, 'show']);

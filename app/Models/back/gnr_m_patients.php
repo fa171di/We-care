@@ -72,6 +72,9 @@ class gnr_m_patients extends Model
         return $this->hasMany(cln_x_prev_dia::class, 'patient','id');
     }
 
+    public function wallet(){
+        return $this->hasMany(wallet::class, 'patient_id','id')->orderBy('id','desc');
+    }
     public function getSex()
     {
         return $this->sex == 1 ? 'ذكر' : 'انثى';
