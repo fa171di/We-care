@@ -58,7 +58,7 @@ class DoctorRepository implements IDoctorRepository
         try {
             DB::transaction(function () use ($request) {
                 $doctor = doctors::findOrFail($request->doctor_id);
-                $new_image = $this->ReplaceImg($doctor, $request, 'photo', 'doctors');
+                $new_image = $this->ReplaceImg($doctor->photo, $request, 'photo', 'doctors');
                 $doctor->act = $request->act;
                 $doctor->name_ar = $request->name_ar;
                 $doctor->from_time = $request->from_time;
