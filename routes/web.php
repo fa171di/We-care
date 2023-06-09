@@ -17,6 +17,7 @@ use App\Http\Controllers\Back\Cln_x_prev_strController;
 use App\Http\Controllers\Back\Gnr_m_patientsInfoController;
 use App\Http\Controllers\Back\Medical_fileController;
 use App\Http\Controllers\Back\ReportsController;
+use App\Http\Controllers\Back\ReviewsController;
 use App\Http\Controllers\Back\RoleController;
 use App\Http\Controllers\Back\UserController;
 use App\Http\Controllers\Back\WalletController;
@@ -78,6 +79,7 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('report', ReportsController::class);
     Route::resource('wallet', WalletController::class);
     Route::resource('ads', AdsController::class);
+    Route::resource('review', ReviewsController::class);
 
 
     //zRoute::get('/user/{id}', [UserController::class, 'show']);

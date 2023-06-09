@@ -70,7 +70,7 @@
                         <img class="card-img-top w-100" src="{{URL::asset('assets/img/photos/7.jpg')}}" alt="">
                         <div class="card-body">
                             <h4 class="card-title">
-                                <b style="    width: 138px;
+                                <b style="    width: 136px;
     display: inline-block;">
                                 {{ $value->getsSex() }} {{ $value->name_ar }}
                                 </b>
@@ -98,6 +98,27 @@
     width: 46px;
     border-radius: 14px;">المزيد</a>
                             </p>
+                            <div class="card-text">
+                                <div class="row">
+                                <div class="col-xl-6 col-lg-6 static-rate text-right fs-30">
+                                    <a href="{{ route('review.create',['doctor' => $value->id,'sec'=>$doctor]) }}"
+                                       class="text-dark" aria-hidden="true">
+                                        @if($value->rateing > 0)
+                                            {{$value->rateing}}
+                                        @else
+                                            0
+                                        @endif
+
+                                    </a>
+                                    <i class="fa fa-star text-warning" aria-hidden="true"></i>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 static-rate text-left fs-30">
+                                    <a class="text-dark" aria-hidden="true">{{$value->revisions_num}}</a>
+                                    <a style="margin-right: 3px;" class="text-dark" aria-hidden="true">مراجعات</a>
+                                </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="divClass card">

@@ -12,7 +12,7 @@
     position: absolute;
     left:9px;
     width:255px;
-    height: 271px;
+    height: 308px;
     transform: rotateY(180deg);
     backface-visibility: hidden;
 }
@@ -26,7 +26,7 @@
     transform: rotateY(180deg);
 
  }*/
-.love:has(a:hover){
+.love:has(.hoverIcon:hover){
     transform: rotateY(180deg);
 }
 

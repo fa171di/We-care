@@ -42,7 +42,8 @@ class DoctorRepository implements IDoctorRepository
 
     public function show($department)
     {
-        return doctors::with('user', 'gnr_m_clinics')->where('subgrp', '=', $department)->get();
+        return doctors::selectRaw('*,total_rate/revisions_num as rateing')
+        ->with('user', 'gnr_m_clinics')->where('subgrp', '=', $department)->orderBy('rateing','desc')->get();
     }
 
     public function edit($doctor)
