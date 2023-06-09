@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
-use App\Models\back\Ads;
-use App\Models\back\doctors;
+use App\Repositories\Reviews\IReviewRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +13,12 @@ class ReviewsController extends Controller
      * Display a listing of the resource.
      */
 
+    private IReviewRepository $reviewRepository;
 
+    public function __construct(IReviewRepository $reviewRepository)
+    {
+        $this->reviewRepository = $reviewRepository;
+    }
     public function index()
     {
 
@@ -37,30 +41,11 @@ class ReviewsController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request);
-        $total=0;
-        $number=0;
-
-        $doctor = doctors::findOrFail($request->doctor);
-        if($request->typeUser == 0){//patine
-           $total = $doctor->total_rate + $request->rating;
-           $number = $doctor->revisions_num + 1;
-
-        }elseif ($request->typeUser == 1){//admin
-            $total = $doctor->total_rate + ($request->rating * 2);
-            $number = $doctor->revisions_num + 2;
-        }
-
         try {
-            DB::transaction(function () use ($request,$doctor,$total,$number) {
-                DB::table('doctors')->where('id', $request->doctor)
-                    ->update([
-                        'total_rate' => $total,
-                        'revisions_num' => $number,
-                    ]);
-            });
-            DB::commit();
-            return redirect()->route('doctors.show', $doctor->subgrp);
+
+        $data = $this->reviewRepository->store($request);
+
+            return redirect()->route('doctors.show', $data['data']);
         } catch (\Exception $ex) {
             DB::rollback();
             return redirect()->back()->with(['error' => $ex]);

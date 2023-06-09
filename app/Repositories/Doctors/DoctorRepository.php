@@ -42,7 +42,7 @@ class DoctorRepository implements IDoctorRepository
 
     public function show($department)
     {
-        return doctors::selectRaw('*,total_rate/revisions_num as rateing')
+        return doctors::selectRaw('*,ROUND(total_rate/revisions_num, 1) as rateing')
         ->with('user', 'gnr_m_clinics')->where('subgrp', '=', $department)->orderBy('rateing','desc')->get();
     }
 
