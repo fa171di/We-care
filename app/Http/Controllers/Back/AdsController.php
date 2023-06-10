@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
-use App\Models\back\Ads;
+use App\Models\back\Question;
 use App\Models\back\gnr_m_areas;
 use App\Models\back\gnr_m_cities;
 use App\Models\back\gnr_m_clinics;
@@ -72,7 +72,7 @@ class AdsController extends Controller
      */
     public function edit(string $id)
     {
-        $ad = Ads::find($id);
+        $ad = Question::find($id);
         return view('back.ads.edit',compact('id','ad'));
     }
 

@@ -103,7 +103,7 @@
                         <x-forms.label id=""><span class="">نوع المستخدم</span></x-forms.label>
                         <select name="roles[]" multiple class="form-control select2">
                             @foreach ($roles as $key => $value)
-                                <option value="{{ $key }}"/>{{ $value }}</option>
+                                <option value="{{ $value->id }}"/>{{ $value }}</option>
                             @endforeach
                         </select>
                     </div>

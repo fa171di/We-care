@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Reviews;
 
-use App\Models\back\Ads;
+use App\Models\back\Question;
 use App\Models\back\doctors;
 use App\Traits\UploadFileTrait;
 use Illuminate\Http\Request;

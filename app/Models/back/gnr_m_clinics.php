@@ -15,6 +15,10 @@ class gnr_m_clinics extends Model
         return $this->hasMany(doctors::class, 'subgrp','id');
     }
 
+    public function Question(){
+        return $this->hasMany(Question::class, 'section','id');
+    }
+
     public function cln_x_visits_services(){
         return $this->hasMany(cln_x_visits_services::class, 'clinic','id');
     }

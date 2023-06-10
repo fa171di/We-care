@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\back\doctors;
 use App\Models\back\gnr_m_patients;
+use App\Models\back\Question;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -57,12 +58,16 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function doctor(): HasOne
     {
-        return $this->hasOne(doctors::class,'user_id', 'id');
+        return $this->hasOne(doctors::class,'user_id', 'id')->withDefault();
     }
 
     public function gnr_m_patients(): HasOne
     {
         return $this->hasOne(gnr_m_patients::class,'user_id', 'id');
+    }
+    public function Question(): HasOne
+    {
+        return $this->hasOne(Question::class,'user_id', 'id');
     }
 
     public static function rules($id = 0)

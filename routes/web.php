@@ -16,6 +16,7 @@ use App\Http\Controllers\Back\Gnr_m_patientsController;
 use App\Http\Controllers\Back\Cln_x_prev_strController;
 use App\Http\Controllers\Back\Gnr_m_patientsInfoController;
 use App\Http\Controllers\Back\Medical_fileController;
+use App\Http\Controllers\Back\QuestionsController;
 use App\Http\Controllers\Back\ReportsController;
 use App\Http\Controllers\Back\ReviewsController;
 use App\Http\Controllers\Back\RoleController;
@@ -80,7 +81,9 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('wallet', WalletController::class);
     Route::resource('ads', AdsController::class);
     Route::resource('review', ReviewsController::class);
-
+    Route::resource('questions', QuestionsController::class);
+    Route::get('/questions/{section}/answer', [QuestionsController::class,'answerTheQ'])->name("questions.answer");
+    Route::get('/questions/user/{user}', [QuestionsController::class,'userQuestions'])->name("questions.user");
 
     //zRoute::get('/user/{id}', [UserController::class, 'show']);
     //Route::get('/MedicalFile/create/{visit}/{clinic}/{patient}', [Medical_fileController::class])->name("MedicalFile.create");;
