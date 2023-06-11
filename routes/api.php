@@ -45,6 +45,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('patient-appointments', [ApiAppointmentController::class, 'pat_appoints']);
     Route::get('doctor-appointments', [ApiAppointmentController::class, 'doc_appoints']);
     Route::get('patient-canceled-appointments', [ApiAppointmentController::class, 'pat_canceled_appoints']);
+    Route::get('patient-previos-appointments', [ApiAppointmentController::class, 'pat_previos_appoints']);
     Route::get('doctor-today-appointments', [ApiAppointmentController::class, 'doc_today_appoints']);
     Route::post('cancel-appointment', [ApiAppointmentController::class, 'cancel_appoint']);
     Route::post('appointment-delete', [ApiAppointmentController::class, 'appointment_delete']);

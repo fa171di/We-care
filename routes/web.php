@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Back\AdsController;
+use App\Http\Controllers\Back\AppointmentController;
 use App\Http\Controllers\Back\Cln_m_medical_hisController;
 use App\Http\Controllers\Back\Cln_m_servicesController;
 use App\Http\Controllers\Back\Cln_x_prev_clnController;
@@ -17,7 +17,6 @@ use App\Http\Controllers\Back\Cln_x_prev_strController;
 use App\Http\Controllers\Back\Gnr_m_patientsInfoController;
 use App\Http\Controllers\Back\Medical_fileController;
 use App\Http\Controllers\Back\ReportsController;
-use App\Http\Controllers\Back\ReviewsController;
 use App\Http\Controllers\Back\RoleController;
 use App\Http\Controllers\Back\UserController;
 use App\Http\Controllers\Back\WalletController;
@@ -78,15 +77,31 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('patients_info', Gnr_m_patientsInfoController::class);
     Route::resource('report', ReportsController::class);
     Route::resource('wallet', WalletController::class);
-    Route::resource('ads', AdsController::class);
-    Route::resource('review', ReviewsController::class);
 
+###################################### Appointment Routes ######################################################
+    Route::get('appointments', [AppointmentController::class, 'index']);
+    Route::post('appointment-status/{id}', [AppointmentController::class, 'appointment_status']);
+    Route::get('getMonthlyAppointments', [AppointmentController::class, 'getMonthlyAppointments']);
+    Route::post('/doctor-by-day-time', [AppointmentController::class, 'doctor_by_day_time'])->name('doctor_by_day_time');
+    Route::post('/appointment-time-by-appointment-slot', [AppointmentController::class, 'time_by_slot'])->name('timeBySlot');
+    Route::get('appointment-create', [AppointmentController::class, 'appointment_create']);
+    Route::post('appointment-store', [AppointmentController::class, 'store']);
+    Route::get('/cal-appointment-show', [AppointmentController::class, 'cal_appointment_show']);
+    Route::get('pending-appointment', [AppointmentController::class, 'pending_appointment']);
+    Route::get('upcoming-appointment', [AppointmentController::class, 'upcoming_appointment']);
+    Route::get('confirm-appointment/{id}', [AppointmentController::class, 'confirm']);
+    Route::get('cancel-appointment/{id}', [AppointmentController::class, 'cancel']);
+    Route::get('today-appointment', [AppointmentController::class, 'today_appointment']);
+    Route::get('patient-appointments/{id}', [AppointmentController::class, 'patient_appointments']);
+    Route::post('filter_App', [AppointmentController::class, 'filter']);
+####################################################################################################################
 
     //zRoute::get('/user/{id}', [UserController::class, 'show']);
     //Route::get('/MedicalFile/create/{visit}/{clinic}/{patient}', [Medical_fileController::class])->name("MedicalFile.create");;
     Route::resource('MedicalFile', Medical_fileController::class);
 
     Route::get('/{page}', [AdminController::class, 'index']);
+
 });
 
 require __DIR__ . '/auth.php';

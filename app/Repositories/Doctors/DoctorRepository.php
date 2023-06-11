@@ -167,8 +167,8 @@ class DoctorRepository implements IDoctorRepository
                 for ($a = 0; $a <= $totalSlots; $a++) {
                     $slot_time_start_min = $a * $slot_time;
                     $slot_time_end_min = $slot_time_start_min + $slot_time;
-                    $slot_time_start = Carbon::parse($start_datetime)->addMinute($slot_time_start_min)->format('H:i:s');
-                    $slot_time_end = Carbon::parse($start_datetime)->addMinute($slot_time_end_min)->format('H:i:s');
+                    $slot_time_start = Carbon::parse($start_datetime)->addMinute($slot_time_start_min)->format('H:i');
+                    $slot_time_end = Carbon::parse($start_datetime)->addMinute($slot_time_end_min)->format('H:i');
                     if ($slot_time_end <= $end_datetime) {
                         // add time slot here
                         $time = $slot_time_start . '<=' . $slot_time_end . '<br>';

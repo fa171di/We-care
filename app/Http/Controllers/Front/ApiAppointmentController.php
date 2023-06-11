@@ -169,6 +169,15 @@ class ApiAppointmentController extends Controller
         }
     }
 
+    public function pat_previos_appoints():JsonResponse{
+        $appointments = $this->AppointmentRepository->pat_previos_appoints();
+        if (!$appointments) {
+            return $this->returnError("D01", "There are no appointments..");
+        } else {
+            return $this->returnData("Appointments", $appointments, "", "D00");
+        }
+    }
+
     public function cancel_appoint(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -192,11 +201,17 @@ class ApiAppointmentController extends Controller
 
     public function appointment_delete(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'appointment' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->returnError("V00", $validator->errors());
+        }
         $appointment = Appointment::find($request->appointment);
         if (!$appointment) {
             return $this->returnError("D01", "appointment not exist..");
         }
-        $appoint = $this->AppointmentRepository->destroy($appointment);
+        $appoint = $this->AppointmentRepository->destroy($appointment->id);
         return $this->returnSuccess("D00", "appointment deleted successfully..");
     }
 

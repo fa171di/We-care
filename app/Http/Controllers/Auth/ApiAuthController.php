@@ -28,7 +28,7 @@ class ApiAuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'password' => 'required',
             'c_password' => 'required|same:password',
             'mother_name' => 'required',
@@ -42,7 +42,7 @@ class ApiAuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->returnError("V00", $validator->errors());
+            return $this->returnError("V01", $validator->errors());
         }
         $newDate = Carbon::createFromFormat('m/d/Y', $request->birth_date)->format('Y-m-d');
         $input = $request->all();

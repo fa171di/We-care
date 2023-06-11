@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 interface IAppointmentRepository
 {
 
+    public function index();
+
+    public function patient_appoi($id);
+
     public function pat_appoints();
 
     public function doc_appoints();
@@ -16,6 +20,8 @@ interface IAppointmentRepository
     public function doc_today_appoints();
 
     public function pat_canceled_appoints();
+
+    public function pat_previos_appoints();
 
     public function show($appointment);
 
