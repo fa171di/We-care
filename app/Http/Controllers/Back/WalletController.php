@@ -78,6 +78,7 @@ class WalletController extends Controller
         //dd($id);
         $patient = gnr_m_patients::select('id','digital_wallet')->where('id', '=', $id)->get();
 
+
         return view('back.wallet.edit', compact('patient'));
     }
 

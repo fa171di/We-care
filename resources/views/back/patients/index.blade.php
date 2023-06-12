@@ -107,8 +107,8 @@
                                 <td>{{$value->digital_wallet}}</td>
                                 <td>{{$value->user->email}}</td>
                                 <td>
-{{--                                   <!-- <a href="{{ route('wallet.edit', $value->id) }}" class="btn btn-sm btn-indigo"--}}
-{{--                                       title="عمليات الحساب"><i class="las la-wallet"></i></a>-->--}}
+                                    <a href="{{ route('wallet.edit', $value->id) }}" class="btn btn-sm btn-indigo"
+                                      title="عمليات الحساب"><i class="las la-wallet"></i></a>
 
                                     <a href="{{ route('patients.edit', $value->id) }}" class="btn btn-sm btn-info"
                                            title="تعديل المريض"><i class="las la-pen"></i></a>

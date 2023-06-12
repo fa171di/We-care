@@ -38,7 +38,7 @@ class DoctorsController extends Controller
      */
     public function create(Request $request)
     {
-        $roles = Role::pluck('name','name')->all();
+        $roles = Role::select('id','name')->get();
         $section = $request['section'];
         return view('back.doctors.create', compact('section','roles'));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Ads;
 
+use App\Models\back\Ads;
 use App\Models\back\Question;
 use App\Traits\UploadFileTrait;
 use Illuminate\Http\Request;
@@ -20,13 +21,13 @@ class AdsRepository implements IAdsRepository
 
     public function index()
     {
-        return Question::all();
+        return Ads::all();
     }
 
 
     public function show($ads)
     {
-        return Question::where('statue','=',$ads)->get();
+        return Ads::where('statue','=',$ads)->get();
     }
 
     public function edit($ads)
@@ -38,7 +39,7 @@ class AdsRepository implements IAdsRepository
     {
         try {
             DB::transaction(function () use ($request,$ads) {
-                $ads = Question::findOrFail($ads);
+                $ads = Ads::findOrFail($ads);
                 $new_image = $this->ReplaceImg($ads->img,$request,'img','ads');
                 $ads->text = $request->text;
                 $ads->img = $new_image;
@@ -65,7 +66,7 @@ class AdsRepository implements IAdsRepository
         if ($request->hasFile('img')) {
             $new_image = $this->UploadFile($request, 'img', 'ads');
         }
-        $ads = Question::create([
+        $ads = Ads::create([
             'text' => $request->text,
             'img'=> $new_image,
             'statue	' => $request->statue
