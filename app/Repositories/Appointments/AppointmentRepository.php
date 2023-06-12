@@ -25,6 +25,28 @@ class AppointmentRepository implements IAppointmentRepository
         $this->Appointment = $appointment;
     }
 
+    public function index(){
+        $user = auth()->user();
+        $role = $user->roles_name;
+        $query = Appointment::query()->with('doctor','timeSlot')
+            ->orderBy('id', 'DESC');
+        $appointments = null;
+        if ($role == 'Doctor'){
+            $appointments = $query->where('appointment_with',$user->id)
+                ->where('is_deleted','=',0)->get();
+        }elseif ($role == 'Reception'){
+            $appointments = $query->where('is_deleted',0)->get();
+        }
+        return $appointments;
+    }
+
+    public function patient_appoi($id){
+        return Appointment::with('doctor','timeSlot')
+            ->where('appointment_for',$id)
+            ->where('is_deleted',0)
+            ->orderBy('id', 'DESC')->get();
+    }
+
     public function pat_appoints()
     {
         $user = auth()->user();
@@ -33,7 +55,8 @@ class AppointmentRepository implements IAppointmentRepository
         return Appointment::with('doctor', 'timeSlot')
             ->where('appointment_for', $user_id)
             ->whereDate('appointment_date', '>', $today)
-            ->where('status', 0)->get();
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC')->get();
     }
 
     public function doc_appoints()
@@ -46,7 +69,7 @@ class AppointmentRepository implements IAppointmentRepository
         return Appointment::with('patient', 'timeSlot')
             ->where('appointment_with', $doc_id)
             ->whereDate('appointment_date', '>', $today)
-            ->where('status', 0)
+            ->where('is_deleted', 0)
             ->orderBy('id', 'DESC')->get();
     }
 
@@ -60,7 +83,7 @@ class AppointmentRepository implements IAppointmentRepository
         return Appointment::with('patient', 'timeSlot')
             ->where('appointment_with', $doc_id)
             ->whereDate('appointment_date', '=', $today)
-            ->where('status', 0)
+            ->where('is_deleted', 0)
             ->orderBy('id', 'DESC')->get();
     }
 
@@ -71,6 +94,19 @@ class AppointmentRepository implements IAppointmentRepository
         return Appointment::with('doctor', 'timeSlot')
             ->where('appointment_for', $user_id)
             ->where('status', 2)
+            ->where('is_deleted',0)
+            ->orderBy('id', 'DESC')->get();
+    }
+
+    public function pat_previos_appoints()
+    {
+        $user = auth()->user();
+        $user_id = $user->id;
+        $today = Carbon::today()->format('Y/m/d');
+        return Appointment::with('doctor', 'timeSlot')
+            ->where('appointment_for', $user_id)
+            ->whereDate('appointment_date', '<', $today)
+            ->where('is_deleted',0)
             ->orderBy('id', 'DESC')->get();
     }
 
@@ -129,8 +165,8 @@ class AppointmentRepository implements IAppointmentRepository
         try {
             $date = $input['appointment_date'];
             $newDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
-            $id_doc = $input['appointment_with'];
             if ($user->roles_name == 'Patient') {
+                $id_doc = $input['appointment_with'];
                 $doctor = doctors::find($id_doc);
                 $apointment = Appointment::create([
                     'appointment_for' => $user->id,
@@ -145,6 +181,15 @@ class AppointmentRepository implements IAppointmentRepository
                     'appointment_date' => $newDate,
                     'available_slot' => $input['available_slot'],
                 ]);
+            } elseif ($user->roles_name == 'Reception') {
+                $id_doc = $input['appointment_with'];
+                $doctor = doctors::find($id_doc);
+                $apointment = Appointment::create([
+                    'appointment_for' => $input['appointment_for'],
+                    'appointment_with' => $doctor->user_id,
+                    'appointment_date' => $newDate,
+                    'available_slot' => $input['available_slot'],
+                ]);
             }
             return $apointment;
         } catch (\Exception $ex) {
@@ -154,7 +199,7 @@ class AppointmentRepository implements IAppointmentRepository
 
     public function destroy($appointment)
     {
-        $appoint = Appointment::find($appointment->id);
+        $appoint = Appointment::find($appointment);
         $appoint->is_deleted = 1;
         $appoint->save();
     }
@@ -162,7 +207,7 @@ class AppointmentRepository implements IAppointmentRepository
     public function cancel_appoint($appointment)
     {
         $appoint = Appointment::find($appointment);
-        $appoint->status = 1;
+        $appoint->status = 2;
         $appoint->save();
         return $appoint;
     }

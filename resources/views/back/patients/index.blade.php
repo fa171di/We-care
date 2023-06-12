@@ -7,7 +7,7 @@
     <link href="{{URL::asset('assets/plugins/treeview/treeview-rtl.css')}}" rel="stylesheet" type="text/css" />
 
 @section('title')
-    الاطباء
+    الحجوزات
 @stop
 
 
@@ -107,11 +107,13 @@
                                 <td>{{$value->digital_wallet}}</td>
                                 <td>{{$value->user->email}}</td>
                                 <td>
-                                   <!-- <a href="{{ route('wallet.edit', $value->id) }}" class="btn btn-sm btn-indigo"
-                                       title="عمليات الحساب"><i class="las la-wallet"></i></a>-->
+{{--                                   <!-- <a href="{{ route('wallet.edit', $value->id) }}" class="btn btn-sm btn-indigo"--}}
+{{--                                       title="عمليات الحساب"><i class="las la-wallet"></i></a>-->--}}
 
                                     <a href="{{ route('patients.edit', $value->id) }}" class="btn btn-sm btn-info"
                                            title="تعديل المريض"><i class="las la-pen"></i></a>
+                                    <a href="{{ url('patient-appointments/'. $value->user->id) }}" class="btn btn-sm btn-primary"
+                                       title="الحجوزات"><i class="las la-calendar-check"></i></a>
 
                                     <a href="{{ route('visits.show', $value->id) }}" class="btn btn-sm btn-success"
                                        title="اظهار جميع الزيارات"><i class="las la-pen"></i></a>

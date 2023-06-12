@@ -51,11 +51,10 @@ class ApiDoctorController extends Controller
         $key = $request->val;
         $doctors = $this->DoctorRepository->search($key);
         if ($doctors->count() == 0) {
-            return $this->returnError("D01", "there are no results");
+            return $this->returnData("doctors",null, "there are no results","D01");
         } else {
             return $this->returnData("doctors", $doctors, "", "D00");
         }
     }
-
 
 }

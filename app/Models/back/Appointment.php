@@ -35,4 +35,20 @@ class Appointment extends Model
     {
         return $this->hasOne(DoctorAvailableSlot::class, 'id', 'available_slot');
     }
+    public static function rules($id = 0)
+    {
+        return [
+            'appointment_for' => 'required',
+            'appointment_with' => 'required',
+            'appointment_date' => 'required',
+            'available_slot' => 'required',
+        ];
+    }
+
+    public static function messages()
+    {
+        return [
+            'required' => 'this field(:attribute) is required',
+        ];
+    }
 }
