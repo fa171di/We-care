@@ -21,6 +21,9 @@ use App\Http\Controllers\Back\RoleController;
 use App\Http\Controllers\Back\UserController;
 use App\Http\Controllers\Back\WalletController;
 use App\Http\Controllers\ProfileController;
+use App\http\Controllers\Back\AdsController;
+use App\http\Controllers\Back\ReviewsController;
+use App\http\Controllers\Back\QuestionsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,6 +80,11 @@ Route::middleware('auth')->group(callback: function () {
     Route::resource('patients_info', Gnr_m_patientsInfoController::class);
     Route::resource('report', ReportsController::class);
     Route::resource('wallet', WalletController::class);
+    Route::resource('ads', AdsController::class);
+    Route::resource('review', ReviewsController::class);
+    Route::resource('questions', QuestionsController::class);
+    Route::get('/questions/{section}/answer', [QuestionsController::class,'answerTheQ'])->name("questions.answer");
+    Route::get('/questions/user/{user}', [QuestionsController::class,'userQuestions'])->name("questions.user");
 
 ###################################### Appointment Routes ######################################################
     Route::get('appointments', [AppointmentController::class, 'index']);
