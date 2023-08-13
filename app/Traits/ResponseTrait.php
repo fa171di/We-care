@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
+use function Pest\Laravel\json;
 
 trait ResponseTrait
 {
@@ -26,6 +27,17 @@ trait ResponseTrait
 
     public function returnData($key, $value, $msg = "", $errNum = "S00")
     {
+        return response()->json([
+            'success' => true,
+            'error' => $errNum,
+            $key => $value,
+            'msg' => $msg
+        ]);
+    }
+
+    public function returnData1($key, $value, $msg = "", $errNum = "S00")
+    {
+        $var = json([$key=>$value]);
         return response()->json([
             'success' => true,
             'error' => $errNum,

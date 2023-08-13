@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\Front\ApiAppointmentController;
+use App\Http\Controllers\Front\ApiMedical_fileController;
 use App\Http\Controllers\Front\ApiPatientController;
 use App\Http\Controllers\Front\ApiDoctorController;
+use App\Http\Controllers\Front\ApiVisitsController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +39,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('famous_doctors', [ApiPatientController::class, 'famous_doctors']);
     Route::post('doctors_by_department', [ApiDoctorController::class, 'dep_doctor']);
     Route::post('search', [ApiDoctorController::class, 'search']);
+    Route::post('review', [ApiDoctorController::class, 'review']);
+    Route::get('visits', [ApiVisitsController::class,'pat_visits']);
+    Route::post('medical-info', [ApiMedical_fileController::class, 'medical_info']);
+
     ################################# Appointment Apis ########################################
     Route::post('doctor_available_days', [ApiAppointmentController::class, 'doctor_available_days']);
     Route::post('slots', [ApiAppointmentController::class, 'slots_by_day']);

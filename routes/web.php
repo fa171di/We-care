@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Back\AdsController;
 use App\Http\Controllers\Back\AppointmentController;
 use App\Http\Controllers\Back\Cln_m_medical_hisController;
 use App\Http\Controllers\Back\Cln_m_servicesController;
@@ -16,14 +17,13 @@ use App\Http\Controllers\Back\Gnr_m_patientsController;
 use App\Http\Controllers\Back\Cln_x_prev_strController;
 use App\Http\Controllers\Back\Gnr_m_patientsInfoController;
 use App\Http\Controllers\Back\Medical_fileController;
+use App\Http\Controllers\Back\QuestionsController;
 use App\Http\Controllers\Back\ReportsController;
+use App\Http\Controllers\Back\ReviewsController;
 use App\Http\Controllers\Back\RoleController;
 use App\Http\Controllers\Back\UserController;
 use App\Http\Controllers\Back\WalletController;
 use App\Http\Controllers\ProfileController;
-use App\http\Controllers\Back\AdsController;
-use App\http\Controllers\Back\ReviewsController;
-use App\http\Controllers\Back\QuestionsController;
 use Illuminate\Support\Facades\Route;
 
 /*

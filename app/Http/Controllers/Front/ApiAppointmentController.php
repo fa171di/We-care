@@ -142,7 +142,7 @@ class ApiAppointmentController extends Controller
     public function doc_appoints(): JsonResponse
     {
         $appointments = $this->AppointmentRepository->doc_appoints();
-        if (!$appointments) {
+        if ($appointments->count()==0) {
             return $this->returnError("D01", "There are no appointments..");
         } else {
             return $this->returnData("Appointments", $appointments, "", "D00");

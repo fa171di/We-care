@@ -13,6 +13,11 @@ class cln_x_visits extends Model
     protected $table = 'cln_x_visits';
 
 
+    public function patient()
+    {
+        return $this->belongsTo(gnr_m_patients::class, 'patient','id')->withDefault();
+    }
+
     public function gnr_m_clinics()
     {
         return $this->belongsTo(gnr_m_clinics::class, 'clinic','id')->withDefault();
@@ -50,6 +55,8 @@ class cln_x_visits extends Model
     public function cln_x_prev_dia(){
         return $this->hasMany(cln_x_prev_dia::class, 'visit','id');
     }
+
+
     public function getsType()
     {
         return $this->type == '1' ? 'منتهية' : 'غير منتهية';

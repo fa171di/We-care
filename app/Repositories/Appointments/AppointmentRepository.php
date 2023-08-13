@@ -67,7 +67,7 @@ class AppointmentRepository implements IAppointmentRepository
         $doctor = doctors::where('user_id', $user_id)->first();
         $doc_id = $doctor->id;
         return Appointment::with('patient', 'timeSlot')
-            ->where('appointment_with', $doc_id)
+            ->where('appointment_with', $user_id)
             ->whereDate('appointment_date', '>', $today)
             ->where('is_deleted', 0)
             ->orderBy('id', 'DESC')->get();
@@ -81,7 +81,7 @@ class AppointmentRepository implements IAppointmentRepository
         $doctor = doctors::where('user_id', $user_id)->first();
         $doc_id = $doctor->id;
         return Appointment::with('patient', 'timeSlot')
-            ->where('appointment_with', $doc_id)
+            ->where('appointment_with', $user_id)
             ->whereDate('appointment_date', '=', $today)
             ->where('is_deleted', 0)
             ->orderBy('id', 'DESC')->get();
