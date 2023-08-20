@@ -14,6 +14,8 @@ interface IQuestionsRepository
 
     public function answerTheQ($Questions);
 
+    public function userQuestions($user);
+
     public function update(Request $request, string $Questions);
 
     public function create();

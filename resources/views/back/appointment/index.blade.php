@@ -56,7 +56,7 @@
                         <h4 class="card-title mg-b-0">STRIPED ROWS</h4>
                         <i class="mdi mdi-dots-horizontal text-gray"></i>
                     </div>
-                    <form action="{{ url("filter_App") }}" method="post" class="row">
+                    <form action="{{ URL::current() }}" method="get" class="row">
                         @csrf
                         @method('POST')
                         <div class="parsley-input col-md-3 mg-t-20 mg-md-t-0" id="lnWrapper">
@@ -100,6 +100,7 @@
                             <tr>
                                 @if($role != 'Doctor')
                                 <th class="wd-lg-8p"><span>اسم الطبيب</span></th>
+                                    <th class="wd-lg-8p"><span>العيادة </span></th>
                                 @endif
                                 <th class="wd-lg-8p"><span>اسم المريض</span></th>
                                 <th class="wd-lg-8p"><span>اليوم</span></th>
@@ -114,6 +115,7 @@
                                 <tr>
                                     @if($role != 'Doctor')
                                     <td>{{$value->doctor->name}}</td>
+                                        <td>{{$value->doctor->doctor->gnr_m_clinics->name_ar}}</td>
                                     @endif
                                     <td>{{$value->patient->name}}</td>
                                         <td>{{$value->appointment_date}}</td>

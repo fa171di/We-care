@@ -17,7 +17,7 @@ class doctors extends Model
 {
     use HasFactory;
     protected $fillable = ['act','famous','name_ar','subgrp','sex','specialization_ar'
-        ,'to_time','slot_time', 'from_time','user_id','phone_number','photo'];
+        ,'to_time','slot_time', 'from_time','user_id','phone_number','photo','total_rate','revisions_num'];
     protected $table = 'doctors';
 
     public function user(): BelongsTo

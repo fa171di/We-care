@@ -26,15 +26,32 @@ class AppointmentRepository implements IAppointmentRepository
     }
 
     public function index(){
+        $request = request();
         $user = auth()->user();
         $role = $user->roles_name;
-        $query = Appointment::query()->with('doctor','timeSlot')
+        $query = Appointment::query()->with('doctor','patient','timeSlot')
             ->orderBy('id', 'DESC');
         $appointments = null;
+        if ($d_name = $request->d_name) {
+            $query->where('doctor.name', 'LIKE', "%{$d_name}%");
+        }
+        if ($p_name = $request->p_name) {
+            $query->where('patient.name', 'LIKE', "%{$p_name}%");
+        }
+//        if ($d_name = $request->query('d_name')) {
+//            $query->where('appointment_with.name', 'LIKE', "%{$d_name}%");
+//        }
+//        if ($d_name = $request->query('d_name')) {
+//            $query->where('appointment_with.name', 'LIKE', "%{$d_name}%");
+//        }
+//        if ($d_name = $request->query('d_name')) {
+//            $query->where('appointment_with.name', 'LIKE', "%{$d_name}%");
+//        }
         if ($role == 'Doctor'){
             $appointments = $query->where('appointment_with',$user->id)
                 ->where('is_deleted','=',0)->get();
-        }elseif ($role == 'Reception'){
+        }elseif ($role == 'Reception'||$role == 'Admin'){
+
             $appointments = $query->where('is_deleted',0)->get();
         }
         return $appointments;

@@ -5,6 +5,7 @@ use App\Http\Controllers\Front\ApiAppointmentController;
 use App\Http\Controllers\Front\ApiMedical_fileController;
 use App\Http\Controllers\Front\ApiPatientController;
 use App\Http\Controllers\Front\ApiDoctorController;
+use App\Http\Controllers\Front\ApiQuestionController;
 use App\Http\Controllers\Front\ApiVisitsController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
@@ -56,6 +57,17 @@ Route::middleware('auth:api')->group(function () {
     Route::post('cancel-appointment', [ApiAppointmentController::class, 'cancel_appoint']);
     Route::post('appointment-delete', [ApiAppointmentController::class, 'appointment_delete']);
     #############################################################################################
+
+    ############################### Questions Routes ############################################
+    Route::get('departments', [ApiQuestionController::class, 'deps']);
+    Route::post('ask', [ApiQuestionController::class, 'store']);
+    Route::get('patient_questions', [ApiQuestionController::class, 'pat_quests']);
+    Route::get('doctor_questions', [ApiQuestionController::class, 'doc_quests']);
+    Route::post('answer', [ApiQuestionController::class, 'answer']);
+
+    #############################################################################################
+
+
 });
 
 

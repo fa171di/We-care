@@ -33,7 +33,10 @@ class ApiMedical_fileController extends Controller
         $patientId  = $visit->patient;
         $clinic = $visit->clinic;
         $patients_medical_info = $patient->gnr_m_patients_medical_info;
-        $patient =  $patient->cln_m_medical_his;
+        $sensitivity =  $patient->cln_m_medical_his->where('cat',1);
+        $surgery =  $patient->cln_m_medical_his->where('cat',2);
+        $chronic =  $patient->cln_m_medical_his->where('cat',3);
+        $medicine =  $patient->cln_m_medical_his->where('cat',4);
         $services = $visit->cln_m_services;
         $com = $visit->cln_x_prev_com;
         $str = $visit->cln_x_prev_str;
@@ -53,7 +56,10 @@ class ApiMedical_fileController extends Controller
             'visitID'=>$visitID,
             'clinic'=>$clinic,
             'dia10'=>$dia10,
-            'patient'=>$patient,
+            'sensitivity'=>$sensitivity,
+            'surgery'=>$surgery,
+            'chronic'=>$chronic,
+            'medicine'=>$medicine,
             'patientId'=>$patientId,
             'cln_m_medical_his_cats'=>$cln_m_medical_his_cats,
             'note'=>$note,

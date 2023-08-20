@@ -29,6 +29,8 @@ class AppointmentController extends Controller
     }
 
     public function index(){
+//        $request = request();
+//        return $request->d_name;
         try {
             $user = auth()->user();
             $role = $user->roles_name;
@@ -37,6 +39,10 @@ class AppointmentController extends Controller
         } catch (\Exception $ex) {
             return redirect()->back()->with(['error' => $ex]);
         }
+    }
+
+    public function appointment_create(){
+
     }
 
     public function patient_appointments($id)
